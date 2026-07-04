@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<!-- TradeLink Caribbean — Tradesperson Registration — v1.0 -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join TradeLink Caribbean — Register as a Tradesperson</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --soil: #0A0E1A;
+    --navy: #0D1B2E;
+    --navy-mid: #122240;
+    --navy-light: #1A3358;
+    --silver: #B8C5D6;
+    --silver-light: #D6E0EC;
+    --silver-dim: #6B7D93;
+    --accent: #4A9ECC;
+    --accent-light: #6AB8E0;
+    --amber: #4A9ECC;
+    --amber-light: #6AB8E0;
+    --cream: #E8EFF7;
+    --ash: #122240;
+    --stone: #4A6080;
+    --white: #F4F8FC;
+    --green: #1A4A3A;
+    --green-light: #2A7A5A;
+    --red: #C0392B;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: var(--soil); color: var(--cream); min-height: 100vh; }
+
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(26,18,8,0.95);
+    border-bottom: 1px solid rgba(74,158,204,0.2);
+  }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--accent); text-decoration: none; }
+  .nav-logo span { color: var(--cream); }
+  .nav-back { color: var(--silver-dim); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--cream); }
+
+  .page-wrap {
+    max-width: 960px; margin: 0 auto;
+    padding: 6rem 2rem 6rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
+  }
+
+  /* LEFT COLUMN — PITCH */
+  .pitch { position: sticky; top: 3rem; }
+  .pitch-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(74,158,204,0.12); border: 1px solid rgba(74,158,204,0.3);
+    color: var(--accent); padding: 0.4rem 0.9rem; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 1.5rem;
+  }
+  .pitch h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.6rem; font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.03em; margin-bottom: 1.2rem;
+  }
+  .pitch h1 em { font-style: normal; color: var(--accent); }
+  .pitch-sub { font-size: 1rem; line-height: 1.7; color: rgba(245,239,224,0.7); margin-bottom: 2rem; }
+
+  .plan-cards { display: flex; flex-direction: column; gap: 0.75rem; }
+  .plan-card {
+    background: var(--navy-mid); border: 1px solid rgba(74,158,204,0.12);
+    border-radius: 8px; padding: 1rem 1.25rem;
+    display: flex; align-items: center; gap: 1rem;
+    cursor: pointer; transition: border-color 0.2s;
+  }
+  .plan-card.selected { border-color: var(--accent); background: rgba(74,158,204,0.06); }
+  .plan-card-radio {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--silver-dim); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s;
+  }
+  .plan-card.selected .plan-card-radio { border-color: var(--accent); background: var(--accent); }
+  .plan-card.selected .plan-card-radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--soil); }
+  .plan-card-info { flex: 1; }
+  .plan-card-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
+  .plan-card-desc { font-size: 0.78rem; color: var(--silver-dim); margin-top: 0.15rem; }
+  .plan-card-price { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--accent); font-size: 1.05rem; text-align: right; white-space: nowrap; }
+  .plan-card-price.free { color: var(--green-light); }
+  .plan-badge {
+    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 3px;
+    background: var(--accent); color: var(--navy); margin-left: 0.4rem;
+    vertical-align: middle;
+  }
+
+  .pitch-note {
+    margin-top: 2rem; padding: 1rem;
+    background: rgba(26,74,58,0.15); border: 1px solid rgba(61,107,66,0.3);
+    border-radius: 6px; font-size: 0.82rem; color: rgba(245,239,224,0.7); line-height: 1.6;
+  }
+  .pitch-note strong { color: var(--green-light); }
+
+  /* RIGHT COLUMN — FORM */
+  .form-panel {
+    background: var(--navy-mid); border: 1px solid rgba(74,158,204,0.2);
+    border-radius: 12px; padding: 2.5rem;
+  }
+  .form-title { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; margin-bottom: 0.3rem; }
+  .form-subtitle { font-size: 0.85rem; color: var(--silver-dim); margin-bottom: 2rem; }
+
+  .step-indicator {
+    display: flex; gap: 0.5rem; margin-bottom: 2rem;
+  }
+  .step-dot {
+    flex: 1; height: 3px; border-radius: 2px;
+    background: rgba(74,158,204,0.2); transition: background 0.3s;
+  }
+  .step-dot.active { background: var(--accent); }
+  .step-dot.done { background: var(--green-light); }
+
+  .form-section { display: none; }
+  .form-section.active { display: block; }
+
+  .field { margin-bottom: 1.2rem; }
+  label { font-size: 0.8rem; color: var(--silver-dim); font-weight: 600; display: block; margin-bottom: 0.4rem; }
+  label span { color: var(--red); margin-left: 2px; }
+  input[type=text], input[type=tel], input[type=email], select, textarea {
+    width: 100%; background: var(--soil);
+    border: 1px solid rgba(74,158,204,0.25); color: var(--cream);
+    padding: 0.7rem 0.9rem; border-radius: 5px;
+    font-size: 0.9rem; font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s; outline: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; }
+  select option { background: var(--navy-mid); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .skills-wrap {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;
+  }
+  .skill-chip {
+    background: rgba(74,158,204,0.1); border: 1px solid rgba(74,158,204,0.25);
+    color: rgba(245,239,224,0.8); padding: 0.3rem 0.7rem; border-radius: 20px;
+    font-size: 0.78rem; cursor: pointer; transition: all 0.15s; user-select: none;
+  }
+  .skill-chip.picked { background: rgba(74,158,204,0.25); border-color: var(--accent); color: var(--cream); }
+
+  .btn-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .btn-next {
+    flex: 1; background: var(--accent); color: var(--navy);
+    border: none; padding: 0.9rem; border-radius: 5px;
+    font-weight: 700; font-size: 0.95rem; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-next:hover { background: var(--accent-light); }
+  .btn-next:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-back {
+    background: transparent; color: var(--silver-dim);
+    border: 1px solid rgba(245,239,224,0.15); padding: 0.9rem 1.2rem;
+    border-radius: 5px; font-weight: 600; font-size: 0.9rem; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+
+  .err-msg { color: var(--red); font-size: 0.82rem; margin-top: 0.8rem; display: none; }
+
+  /* SUCCESS STATE */
+  .success-panel { display: none; text-align: center; padding: 2rem 1rem; }
+  .success-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .success-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); margin-bottom: 0.75rem; }
+  .success-body { font-size: 0.92rem; color: rgba(245,239,224,0.75); line-height: 1.7; margin-bottom: 2rem; }
+  .success-whatsapp {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--green-light); color: var(--cream);
+    padding: 0.8rem 1.6rem; border-radius: 5px;
+    font-weight: 700; font-size: 0.9rem; text-decoration: none;
+    margin-bottom: 1rem;
+  }
+  .success-back { display: block; margin-top: 0.8rem; color: var(--silver-dim); text-decoration: none; font-size: 0.85rem; }
+  .success-back:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .page-wrap { grid-template-columns: 1fr; gap: 2.5rem; padding: 2rem 1.2rem 4rem; }
+    .pitch { position: static; }
+    .pitch h1 { font-size: 2rem; }
+    .field-row { grid-template-columns: 1fr; }
+    .form-panel { padding: 1.8rem 1.3rem; }
+  }
+
+  /* ── UNIFIED NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 4rem;
+    height: 64px;
+    background: rgba(10,14,26,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(184,197,214,0.1);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.25rem;
+    color: var(--accent); letter-spacing: -0.02em;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .nav-logo span { color: var(--cream); }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 0.25rem;
+  }
+  .nav-links > a, .nav-drop-trigger {
+    color: var(--silver-dim); text-decoration: none;
+    font-size: 0.875rem; font-weight: 500;
+    padding: 0.5rem 0.85rem; border-radius: 5px;
+    transition: color 0.2s, background 0.2s;
+    background: transparent; border: none; cursor: pointer;
+    font-family: 'Inter', sans-serif; white-space: nowrap;
+    display: flex; align-items: center; gap: 0.35rem;
+  }
+  .nav-links > a:hover, .nav-drop-trigger:hover { color: var(--cream); background: rgba(184,197,214,0.06); }
+  .nav-links > a.active, .nav-drop-trigger.active { color: var(--cream); }
+
+  /* Dropdown wrapper */
+  .nav-dropdown { position: relative; }
+  .nav-drop-trigger svg { transition: transform 0.2s; }
+  .nav-dropdown.open .nav-drop-trigger svg { transform: rotate(180deg); }
+
+  .nav-drop-menu {
+    display: none;
+    position: absolute; top: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy-mid);
+    border: 1px solid rgba(184,197,214,0.12);
+    border-radius: 10px; padding: 0.5rem;
+    min-width: 220px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    z-index: 200;
+  }
+  .nav-dropdown.open .nav-drop-menu { display: block; }
+
+  .nav-drop-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.65rem 0.9rem; border-radius: 7px;
+    text-decoration: none; color: var(--silver-dim);
+    font-size: 0.875rem; font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-drop-item:hover { background: rgba(74,158,204,0.1); color: var(--cream); }
+  .nav-drop-item-icon {
+    width: 30px; height: 30px; border-radius: 6px;
+    background: rgba(74,158,204,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem; flex-shrink: 0;
+  }
+  .nav-drop-item-text { display: flex; flex-direction: column; }
+  .nav-drop-item-label { font-weight: 600; color: var(--cream); font-size: 0.85rem; line-height: 1.2; }
+  .nav-drop-item-desc { font-size: 0.75rem; color: var(--silver-dim); margin-top: 0.1rem; }
+  .nav-drop-divider { height: 1px; background: rgba(184,197,214,0.08); margin: 0.35rem 0; }
+
+  .nav-cta {
+    background: var(--accent); color: var(--navy) !important;
+    padding: 0.55rem 1.3rem; border-radius: 5px;
+    font-weight: 700 !important; font-size: 0.875rem;
+    text-decoration: none; margin-left: 0.5rem;
+    transition: background 0.2s; white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--accent-light) !important; color: var(--navy) !important; }
+
+  /* Mobile hamburger */
+  .nav-hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: transparent; border: none; cursor: pointer;
+    padding: 0.4rem;
+  }
+  .nav-hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--silver); border-radius: 2px;
+    transition: all 0.25s;
+  }
+  .nav-mobile-menu {
+    display: none; position: fixed; top: 64px; left: 0; right: 0;
+    background: var(--navy-mid);
+    border-bottom: 1px solid rgba(184,197,214,0.1);
+    padding: 1rem 1.5rem 1.5rem; z-index: 999;
+    flex-direction: column; gap: 0.25rem;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.75rem 0.5rem; border-radius: 7px;
+    text-decoration: none; color: var(--silver-dim);
+    font-size: 0.9rem; font-weight: 500;
+    transition: color 0.15s, background 0.15s;
+  }
+  .nav-mobile-item:hover { color: var(--cream); background: rgba(74,158,204,0.08); }
+  .nav-mobile-section {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--silver-dim);
+    padding: 0.75rem 0.5rem 0.25rem; opacity: 0.6;
+  }
+  .nav-mobile-cta {
+    background: var(--accent); color: var(--navy) !important;
+    padding: 0.8rem; border-radius: 6px;
+    font-weight: 700; text-align: center; text-decoration: none;
+    margin-top: 0.5rem; display: block;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+  }
+
+</style>
+</head>
+<body>
+
+
+<nav>
+  <a href="index.html" class="nav-logo">TradeLink<span> Caribbean</span></a>
+
+  <div class="nav-links">
+
+    <!-- Browse dropdown -->
+    <div class="nav-dropdown" id="drop-browse">
+      <button class="nav-drop-trigger " onclick="toggleDrop('browse')">
+        Browse
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="nav-drop-menu">
+        <a href="index.html#trades" class="nav-drop-item">
+          <div class="nav-drop-item-icon">🔨</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Find Tradespeople</span>
+            <span class="nav-drop-item-desc">Search by trade and parish</span>
+          </div>
+        </a>
+        <a href="index.html#quote" class="nav-drop-item">
+          <div class="nav-drop-item-icon">📡</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Post a Job</span>
+            <span class="nav-drop-item-desc">Broadcast to matching tradespeople</span>
+          </div>
+        </a>
+        <a href="index.html#how" class="nav-drop-item">
+          <div class="nav-drop-item-icon">📋</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">How It Works</span>
+            <span class="nav-drop-item-desc">See the process</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- For Tradespeople dropdown -->
+    <div class="nav-dropdown" id="drop-trades">
+      <button class="nav-drop-trigger active" onclick="toggleDrop('trades')">
+        For Tradespeople
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="nav-drop-menu">
+        <a href="join.html" class="nav-drop-item">
+          <div class="nav-drop-item-icon">✅</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Register Free</span>
+            <span class="nav-drop-item-desc">Create your profile today</span>
+          </div>
+        </a>
+        <div class="nav-drop-divider"></div>
+        <a href="index.html#pricing" class="nav-drop-item">
+          <div class="nav-drop-item-icon">💳</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Pricing Plans</span>
+            <span class="nav-drop-item-desc">Bronze · Standard · Gold</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Advertise dropdown -->
+    <div class="nav-dropdown" id="drop-adv">
+      <button class="nav-drop-trigger " onclick="toggleDrop('adv')">
+        Advertise
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="nav-drop-menu">
+        <a href="advertise.html" class="nav-drop-item">
+          <div class="nav-drop-item-icon">📢</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Book Ad Space</span>
+            <span class="nav-drop-item-desc">Reach Jamaica's trade audience</span>
+          </div>
+        </a>
+        <a href="index.html#advertise" class="nav-drop-item">
+          <div class="nav-drop-item-icon">📊</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Ad Packages</span>
+            <span class="nav-drop-item-desc">View placements and rates</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <a href="join.html" class="nav-cta">Join Free</a>
+  <button class="nav-hamburger" onclick="toggleMobile()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="nav-mobile-menu" id="nav-mobile">
+  <div class="nav-mobile-section">Browse</div>
+  <a href="index.html#trades" class="nav-mobile-item" onclick="closeMobile()">🔨 &nbsp;Find Tradespeople</a>
+  <a href="index.html#quote" class="nav-mobile-item" onclick="closeMobile()">📡 &nbsp;Post a Job</a>
+  <a href="index.html#how" class="nav-mobile-item" onclick="closeMobile()">📋 &nbsp;How It Works</a>
+  <div class="nav-mobile-section">Tradespeople</div>
+  <a href="join.html" class="nav-mobile-item" onclick="closeMobile()">✅ &nbsp;Register Free</a>
+  <a href="index.html#pricing" class="nav-mobile-item" onclick="closeMobile()">💳 &nbsp;Pricing Plans</a>
+  <div class="nav-mobile-section">Advertise</div>
+  <a href="advertise.html" class="nav-mobile-item" onclick="closeMobile()">📢 &nbsp;Book Ad Space</a>
+  <a href="index.html#advertise" class="nav-mobile-item" onclick="closeMobile()">📊 &nbsp;Ad Packages</a>
+  <a href="join.html" class="nav-mobile-cta">Get Started Free →</a>
+</div>
+
+
+<div class="page-wrap">
+
+  <!-- LEFT: PITCH -->
+  <div class="pitch">
+    <div class="pitch-eyebrow">🔨 For Tradespeople</div>
+    <h1>Get found.<br>Get hired.<br><em>Get paid.</em></h1>
+    <p class="pitch-sub">TradeLink puts your profile in front of property owners, landlords, and contractors across Jamaica. Start free — no card, no commitment.</p>
+
+    <div class="plan-cards" id="plan-selector">
+      <div class="plan-card selected" data-plan="free" onclick="selectPlan(this)">
+        <div class="plan-card-radio"></div>
+        <div class="plan-card-info">
+          <div class="plan-card-name">Free Listing</div>
+          <div class="plan-card-desc">Public profile, trade badge, WhatsApp button</div>
+        </div>
+        <div class="plan-card-price free">FREE</div>
+      </div>
+      <div class="plan-card" data-plan="bronze" onclick="selectPlan(this)">
+        <div class="plan-card-radio"></div>
+        <div class="plan-card-info">
+          <div class="plan-card-name">Bronze</div>
+          <div class="plan-card-desc">Everything free + leads forwarded to WhatsApp</div>
+        </div>
+        <div class="plan-card-price">$6<span style="font-size:0.7rem;font-weight:500;color:var(--silver-dim)">/mo USD</span></div>
+      </div>
+      <div class="plan-card" data-plan="standard" onclick="selectPlan(this)">
+        <div class="plan-card-radio"></div>
+        <div class="plan-card-info">
+          <div class="plan-card-name">Standard <span class="plan-badge">Popular</span></div>
+          <div class="plan-card-desc">Priority placement + Verified badge + leads</div>
+        </div>
+        <div class="plan-card-price">$10.99<span style="font-size:0.7rem;font-weight:500;color:var(--silver-dim)">/mo USD</span></div>
+      </div>
+      <div class="plan-card" data-plan="gold" onclick="selectPlan(this)">
+        <div class="plan-card-radio"></div>
+        <div class="plan-card-info">
+          <div class="plan-card-name">Gold</div>
+          <div class="plan-card-desc">Homepage featured + Gold badge + social spotlight</div>
+        </div>
+        <div class="plan-card-price">$20<span style="font-size:0.7rem;font-weight:500;color:var(--silver-dim)">/mo USD</span></div>
+      </div>
+    </div>
+
+    <div class="pitch-note">
+      <strong>Free plan is always free.</strong> Paid plans are activated after you register — we'll reach out via WhatsApp with payment details. No card required to sign up.
+    </div>
+  </div>
+
+  <!-- RIGHT: FORM -->
+  <div class="form-panel">
+    <div id="reg-form">
+      <div class="form-title">Create your profile</div>
+      <div class="form-subtitle">Takes about 2 minutes. Your listing goes live once we verify you.</div>
+
+      <div class="step-indicator">
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+      </div>
+
+      <!-- STEP 1: Basic Info -->
+      <div class="form-section active" id="step-1">
+        <div class="field">
+          <label>Full Name <span>*</span></label>
+          <input type="text" id="r-name" placeholder="e.g. Andre Thompson">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>WhatsApp Number <span>*</span></label>
+            <input type="tel" id="r-phone" placeholder="876-555-0000">
+          </div>
+          <div class="field">
+            <label>Parish <span>*</span></label>
+            <select id="r-parish">
+              <option value="">Select...</option>
+              <option>St. James (Montego Bay)</option>
+              <option>Kingston</option>
+              <option>St. Andrew</option>
+              <option>St. Catherine</option>
+              <option>St. Ann</option>
+              <option>Manchester</option>
+              <option>Westmoreland</option>
+              <option>Clarendon</option>
+              <option>Trelawny</option>
+              <option>Hanover</option>
+              <option>St. Elizabeth</option>
+              <option>Portland</option>
+              <option>St. Thomas</option>
+              <option>St. Mary</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Your Trade <span>*</span></label>
+          <select id="r-trade">
+            <option value="">Select your trade...</option>
+            <option>Electrician</option>
+            <option>Plumber</option>
+            <option>Mason</option>
+            <option>Tiler</option>
+            <option>Welder</option>
+            <option>Carpenter</option>
+            <option>Painter</option>
+            <option>A/C &amp; Cooling Tech</option>
+            <option>General Contractor</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="err-msg" id="err-1">Please fill in all required fields.</div>
+        <div class="btn-row">
+          <button class="btn-next" onclick="goStep(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Skills & Experience -->
+      <div class="form-section" id="step-2">
+        <div class="field">
+          <label>Years of Experience</label>
+          <select id="r-exp">
+            <option value="">Select...</option>
+            <option>Less than 1 year</option>
+            <option>1–3 years</option>
+            <option>3–5 years</option>
+            <option>5–10 years</option>
+            <option>10+ years</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Specific Skills <span style="color:var(--silver-dim);font-weight:400;">(tap to select)</span></label>
+          <div class="skills-wrap" id="skills-wrap">
+            <!-- populated by JS based on trade -->
+          </div>
+        </div>
+        <div class="field">
+          <label>Brief Bio / Description</label>
+          <textarea id="r-bio" rows="3" placeholder="e.g. 8 years experience in residential wiring and solar panel installation across St. James and Trelawny."></textarea>
+        </div>
+        <div class="err-msg" id="err-2">Please select at least one skill.</div>
+        <div class="btn-row">
+          <button class="btn-back" onclick="goStep(1)">← Back</button>
+          <button class="btn-next" onclick="goStep(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Plan Confirmation -->
+      <div class="form-section" id="step-3">
+        <div id="plan-summary" style="background:var(--soil);border:1px solid rgba(74,158,204,0.2);border-radius:8px;padding:1.2rem;margin-bottom:1.5rem;">
+        </div>
+
+        <div id="payment-instructions" style="display:none;background:rgba(74,158,204,0.06);border:1px solid rgba(74,158,204,0.2);border-radius:8px;padding:1.2rem;margin-bottom:1.5rem;">
+          <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:0.6rem;">💳 Payment via Lynk</div>
+          <div style="font-size:0.88rem;color:rgba(245,239,224,0.8);line-height:1.7;">
+            After registration, send your first month to:<br>
+            <span style="font-family:'Syne',sans-serif;font-size:1.1rem;color:var(--accent);font-weight:700;">@tradelinkcaribbean</span><br>
+            <span style="font-size:0.8rem;color:var(--silver-dim);">Bank transfer also accepted — we'll send details via WhatsApp.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>How did you hear about TradeLink?</label>
+          <select id="r-source">
+            <option value="">Select...</option>
+            <option>Instagram</option>
+            <option>Facebook</option>
+            <option>WhatsApp</option>
+            <option>A friend / referral</option>
+            <option>Google</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="err-msg" id="err-3">Something went wrong. Please try again.</div>
+        <div class="btn-row">
+          <button class="btn-back" onclick="goStep(2)">← Back</button>
+          <button class="btn-next" id="submit-btn" onclick="submitRegistration()">Submit Registration</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-panel" id="success-panel">
+      <div class="success-icon">✅</div>
+      <div class="success-title">You're registered!</div>
+      <div class="success-body" id="success-body">
+        Your profile is submitted. We'll review it and WhatsApp you once you're live on TradeLink — usually within 24 hours.
+      </div>
+      <a id="success-whatsapp-link" href="#" target="_blank" class="success-whatsapp">
+        📲 WhatsApp Us to Confirm
+      </a>
+      <a href="index.html" class="success-back">← Back to TradeLink</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://cqvawtpgvcmiyyldnnyu.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_px1LGLEM7OE1VB-b7RvPvg_8T7HPZUZ';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let selectedPlan = 'free';
+  let selectedSkills = [];
+  let currentStep = 1;
+
+  const TRADE_SKILLS = {
+    'Electrician': ['Residential Wiring','Commercial Wiring','Panel Upgrades','Solar Install','Security Systems','Generator Install'],
+    'Plumber': ['Pipe Installation','Drain Cleaning','Bathroom Fitting','Water Tank','Leak Repair','Septic Systems'],
+    'Mason': ['Block Laying','Foundation Work','Plastering','Concrete Pouring','Retaining Walls','Repairs'],
+    'Tiler': ['Floor Tiling','Wall Tiling','Bathroom Tiling','Pool Tiling','Grouting','Waterproofing'],
+    'Welder': ['MIG Welding','TIG Welding','Gates & Grilles','Steel Fabrication','Repairs','Structural'],
+    'Carpenter': ['Furniture Making','Cabinet Making','Roofing','Formwork','Doors & Windows','Finishing'],
+    'Painter': ['Interior','Exterior','Waterproofing','Epoxy Floors','Decorative Finishes','Commercial'],
+    'A/C & Cooling Tech': ['Installation','Service & Repair','Refrigeration','Commercial HVAC','Duct Work','Maintenance'],
+    'General Contractor': ['Project Management','Renovation','New Construction','Supervision','Estimating','Design'],
+    'Other': ['General Labour','Handyman','Landscaping','Roofing','Waterproofing','Other']
+  };
+
+  function selectPlan(el) {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPlan = el.dataset.plan;
+    updatePlanSummary();
+  }
+
+  function updatePlanSummary() {
+    const names = { free: 'Free Listing', bronze: 'Bronze — $6 USD/month', standard: 'Standard — $10.99 USD/month', gold: 'Gold — $20 USD/month' };
+    const descs = {
+      free: 'Your profile will be listed publicly. Property owners can contact you via WhatsApp.',
+      bronze: 'Everything in Free + leads forwarded to your WhatsApp.',
+      standard: 'Priority placement, Verified badge, and leads forwarded to your WhatsApp.',
+      gold: 'Homepage featured placement, Gold badge, social media spotlight, and priority lead routing.'
+    };
+    const el = document.getElementById('plan-summary');
+    const payEl = document.getElementById('payment-instructions');
+    if (el) {
+      el.innerHTML = `
+        <div style="font-size:0.75rem;color:var(--silver-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;">Selected Plan</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--accent);margin-bottom:0.3rem;">${names[selectedPlan]}</div>
+        <div style="font-size:0.85rem;color:rgba(245,239,224,0.7);line-height:1.6;">${descs[selectedPlan]}</div>
+      `;
+    }
+    if (payEl) payEl.style.display = selectedPlan === 'free' ? 'none' : 'block';
+  }
+
+  function renderSkills(trade) {
+    const wrap = document.getElementById('skills-wrap');
+    selectedSkills = [];
+    const options = TRADE_SKILLS[trade] || TRADE_SKILLS['Other'];
+    wrap.innerHTML = options.map(s => `<span class="skill-chip" onclick="toggleSkill(this,'${s}')">${s}</span>`).join('');
+  }
+
+  function toggleSkill(el, skill) {
+    el.classList.toggle('picked');
+    if (el.classList.contains('picked')) {
+      selectedSkills.push(skill);
+    } else {
+      selectedSkills = selectedSkills.filter(s => s !== skill);
+    }
+  }
+
+  document.getElementById('r-trade').addEventListener('change', function() {
+    renderSkills(this.value);
+  });
+
+  function goStep(n) {
+    // Validate before advancing
+    if (n > currentStep) {
+      if (currentStep === 1) {
+        const name = document.getElementById('r-name').value.trim();
+        const phone = document.getElementById('r-phone').value.trim();
+        const parish = document.getElementById('r-parish').value;
+        const trade = document.getElementById('r-trade').value;
+        if (!name || !phone || !parish || !trade) {
+          document.getElementById('err-1').style.display = 'block';
+          return;
+        }
+        document.getElementById('err-1').style.display = 'none';
+        renderSkills(trade);
+      }
+      if (currentStep === 2) {
+        // skills optional — just advance
+        document.getElementById('err-2').style.display = 'none';
+      }
+    }
+
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    currentStep = n;
+    document.getElementById('step-' + n).classList.add('active');
+
+    // Update dots
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById('dot-' + i);
+      dot.className = 'step-dot';
+      if (i < n) dot.classList.add('done');
+      else if (i === n) dot.classList.add('active');
+    }
+
+    if (n === 3) updatePlanSummary();
+  }
+
+  async function submitRegistration() {
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    const name = document.getElementById('r-name').value.trim();
+    const phone = document.getElementById('r-phone').value.trim();
+    const parish = document.getElementById('r-parish').value;
+    const trade = document.getElementById('r-trade').value;
+    const exp = document.getElementById('r-exp').value;
+    const bio = document.getElementById('r-bio').value.trim();
+    const source = document.getElementById('r-source').value;
+
+    const isPaid = selectedPlan !== 'free';
+
+    const { error } = await supabase.from('subscription_registrations').insert([{
+      full_name: name,
+      phone: phone,
+      trade: trade,
+      parish: parish,
+      plan: selectedPlan,
+      payment_method: isPaid ? 'lynk' : null,
+      notes: [exp ? 'Experience: ' + exp : '', bio ? 'Bio: ' + bio : '', source ? 'Source: ' + source : ''].filter(Boolean).join(' | ')
+    }]);
+
+    if (error) {
+      document.getElementById('err-3').textContent = 'Something went wrong: ' + error.message;
+      document.getElementById('err-3').style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Submit Registration';
+      return;
+    }
+
+    // Show success
+    document.getElementById('reg-form').style.display = 'none';
+    const successPanel = document.getElementById('success-panel');
+    successPanel.style.display = 'block';
+
+    const bodyEl = document.getElementById('success-body');
+    if (isPaid) {
+      bodyEl.innerHTML = `Your <strong style="color:var(--accent)">${selectedPlan.charAt(0).toUpperCase()+selectedPlan.slice(1)}</strong> plan registration is in. Send your first month payment via Lynk to <strong style="color:var(--accent)">@tradelinkcaribbean</strong>, then WhatsApp us to confirm — we'll activate your listing within 24 hours.`;
+    } else {
+      bodyEl.textContent = "You're on the free plan. We'll review your registration and WhatsApp you once your profile is live — usually within 24 hours.";
+    }
+
+    const waMsg = encodeURIComponent(`Hi TradeLink! I just registered as a ${trade} on the ${selectedPlan} plan. My name is ${name}, number ${phone}.`);
+    document.getElementById('success-whatsapp-link').href = `https://wa.me/18765550000?text=${waMsg}`;
+  }
+
+  // ── NAV DROPDOWN LOGIC ──
+  function toggleDrop(key) {
+    const all = ['browse','trades','adv'];
+    all.forEach(k => {
+      const el = document.getElementById('drop-' + k);
+      if (el) el.classList.toggle('open', k === key && !el.classList.contains('open'));
+    });
+  }
+  function toggleMobile() {
+    document.getElementById('nav-mobile').classList.toggle('open');
+  }
+  function closeMobile() {
+    document.getElementById('nav-mobile').classList.remove('open');
+  }
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.nav-dropdown')) {
+      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+    }
+  });
+
+</script>
+</body>
+</html>

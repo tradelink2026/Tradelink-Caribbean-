@@ -1,0 +1,2547 @@
+<!DOCTYPE html>
+<!-- TradeLink Caribbean v2.1 — Supabase Build — 2026-06-20 -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeLink Caribbean — Jamaica's Skilled Trades Network</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --soil: #0A0E1A;
+    --navy: #0D1B2E;
+    --navy-mid: #122240;
+    --navy-light: #1A3358;
+    --silver: #B8C5D6;
+    --silver-light: #D6E0EC;
+    --silver-dim: #6B7D93;
+    --cream: #E8EFF7;
+    --white: #F4F8FC;
+    --accent: #4A9ECC;
+    --accent-light: #6AB8E0;
+    --green: #1A4A3A;
+    --green-light: #2A7A5A;
+    --red: #C0392B;
+    --amber: #4A9ECC;
+    --amber-light: #6AB8E0;
+    --ash: #122240;
+    --stone: #4A6080;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--soil);
+    color: var(--cream);
+    background-image: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(74,158,204,0.08) 0%, transparent 60%);
+    overflow-x: hidden;
+  }
+
+
+  /* ── UNIFIED NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 4rem;
+    height: 64px;
+    background: rgba(10,14,26,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(184,197,214,0.1);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.25rem;
+    color: var(--accent); letter-spacing: -0.02em;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .nav-logo span { color: var(--cream); }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 0.25rem;
+  }
+  .nav-links > a, .nav-drop-trigger {
+    color: var(--silver-dim); text-decoration: none;
+    font-size: 0.875rem; font-weight: 500;
+    padding: 0.5rem 0.85rem; border-radius: 5px;
+    transition: color 0.2s, background 0.2s;
+    background: transparent; border: none; cursor: pointer;
+    font-family: 'Inter', sans-serif; white-space: nowrap;
+    display: flex; align-items: center; gap: 0.35rem;
+  }
+  .nav-links > a:hover, .nav-drop-trigger:hover { color: var(--cream); background: rgba(184,197,214,0.06); }
+  .nav-links > a.active, .nav-drop-trigger.active { color: var(--cream); }
+
+  /* Dropdown wrapper */
+  .nav-dropdown { position: relative; }
+  .nav-drop-trigger svg { transition: transform 0.2s; }
+  .nav-dropdown.open .nav-drop-trigger svg { transform: rotate(180deg); }
+
+  .nav-drop-menu {
+    display: none;
+    position: absolute; top: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy-mid);
+    border: 1px solid rgba(184,197,214,0.12);
+    border-radius: 10px; padding: 0.5rem;
+    min-width: 220px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    z-index: 200;
+  }
+  .nav-dropdown.open .nav-drop-menu { display: block; }
+
+  .nav-drop-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.65rem 0.9rem; border-radius: 7px;
+    text-decoration: none; color: var(--silver-dim);
+    font-size: 0.875rem; font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-drop-item:hover { background: rgba(74,158,204,0.1); color: var(--cream); }
+  .nav-drop-item-icon {
+    width: 30px; height: 30px; border-radius: 6px;
+    background: rgba(74,158,204,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem; flex-shrink: 0;
+  }
+  .nav-drop-item-text { display: flex; flex-direction: column; }
+  .nav-drop-item-label { font-weight: 600; color: var(--cream); font-size: 0.85rem; line-height: 1.2; }
+  .nav-drop-item-desc { font-size: 0.75rem; color: var(--silver-dim); margin-top: 0.1rem; }
+  .nav-drop-divider { height: 1px; background: rgba(184,197,214,0.08); margin: 0.35rem 0; }
+
+  .nav-cta {
+    background: var(--accent); color: var(--navy) !important;
+    padding: 0.55rem 1.3rem; border-radius: 5px;
+    font-weight: 700 !important; font-size: 0.875rem;
+    text-decoration: none; margin-left: 0.5rem;
+    transition: background 0.2s; white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--accent-light) !important; color: var(--navy) !important; }
+
+  /* Mobile hamburger */
+  .nav-hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: transparent; border: none; cursor: pointer;
+    padding: 0.4rem;
+  }
+  .nav-hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--silver); border-radius: 2px;
+    transition: all 0.25s;
+  }
+  .nav-mobile-menu {
+    display: none; position: fixed; top: 64px; left: 0; right: 0;
+    background: var(--navy-mid);
+    border-bottom: 1px solid rgba(184,197,214,0.1);
+    padding: 1rem 1.5rem 1.5rem; z-index: 999;
+    flex-direction: column; gap: 0.25rem;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.75rem 0.5rem; border-radius: 7px;
+    text-decoration: none; color: var(--silver-dim);
+    font-size: 0.9rem; font-weight: 500;
+    transition: color 0.15s, background 0.15s;
+  }
+  .nav-mobile-item:hover { color: var(--cream); background: rgba(74,158,204,0.08); }
+  .nav-mobile-section {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--silver-dim);
+    padding: 0.75rem 0.5rem 0.25rem; opacity: 0.6;
+  }
+  .nav-mobile-cta {
+    background: var(--accent); color: var(--navy) !important;
+    padding: 0.8rem; border-radius: 6px;
+    font-weight: 700; text-align: center; text-decoration: none;
+    margin-top: 0.5rem; display: block;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+  }
+
+    /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 50%, rgba(74,158,204,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(184,197,214,0.06) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.03;
+    background-image: linear-gradient(var(--silver) 1px, transparent 1px),
+      linear-gradient(90deg, var(--silver) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content { position: relative; max-width: 700px; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(184,197,214,0.12); border: 1px solid rgba(74,158,204,0.3);
+    color: var(--accent); padding: 0.4rem 0.9rem; border-radius: 20px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 1.8rem;
+  }
+  .hero-eyebrow::before { content: '🔨'; font-size: 0.9rem; }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+    position: relative;
+  }
+  h1 em::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 3px; background: var(--accent); border-radius: 2px;
+    opacity: 0.4;
+  }
+  .hero-sub {
+    font-size: 1.15rem; line-height: 1.7;
+    color: rgba(245,239,224,0.7);
+    max-width: 520px; margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: var(--navy);
+    padding: 0.9rem 2rem; border-radius: 5px;
+    font-weight: 700; font-size: 0.95rem;
+    border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent; color: var(--cream);
+    padding: 0.9rem 2rem; border-radius: 5px;
+    font-weight: 600; font-size: 0.95rem;
+    border: 1px solid rgba(245,239,224,0.25);
+    cursor: pointer; transition: border-color 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(245,239,224,0.1);
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800; color: var(--accent);
+  }
+  .stat-label { font-size: 0.8rem; color: var(--silver-dim); margin-top: 0.2rem; }
+
+  /* FEATURED AD BANNER */
+  .ad-banner {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    border: 1px solid rgba(61,107,66,0.5);
+    margin: 0 4rem;
+    border-radius: 8px;
+    padding: 1rem 1.8rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+  }
+  .ad-badge {
+    font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(245,239,224,0.5);
+    background: rgba(0,0,0,0.2); padding: 0.2rem 0.5rem;
+    border-radius: 3px; white-space: nowrap;
+  }
+  .ad-text { font-size: 0.9rem; font-weight: 500; }
+  .ad-text strong { color: var(--accent-light); }
+  .ad-cta {
+    background: var(--accent); color: var(--navy);
+    padding: 0.45rem 1rem; border-radius: 4px;
+    font-size: 0.8rem; font-weight: 700;
+    border: none; cursor: pointer; white-space: nowrap;
+  }
+
+  /* SECTION BASE */
+  section { padding: 6rem 4rem; }
+
+  /* HOW IT WORKS */
+  .how {
+    background: var(--ash);
+    border-top: 1px solid rgba(184,197,214,0.1);
+    border-bottom: 1px solid rgba(184,197,214,0.1);
+  }
+  .section-label {
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 800; letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    color: rgba(245,239,224,0.6); font-size: 1rem;
+    line-height: 1.7; max-width: 520px;
+    margin-bottom: 3.5rem;
+  }
+  .steps-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5px; background: rgba(184,197,214,0.15);
+    border: 1px solid rgba(184,197,214,0.15);
+    border-radius: 8px; overflow: hidden;
+  }
+  .step {
+    background: var(--ash); padding: 2rem;
+    position: relative;
+  }
+  .step-icon {
+    font-size: 2rem; margin-bottom: 1rem; display: block;
+  }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem; font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+  .step-desc { font-size: 0.875rem; color: rgba(245,239,224,0.6); line-height: 1.6; }
+
+  /* TRADES / PROFILES */
+  .trades-section { background: var(--soil); }
+  .trades-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem; margin-top: 3rem;
+  }
+  .trade-card {
+    background: var(--ash);
+    border: 1px solid rgba(184,197,214,0.12);
+    border-radius: 8px; padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .trade-card:hover {
+    border-color: rgba(74,158,204,0.5);
+    transform: translateY(-2px);
+  }
+  .trade-card-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+  .trade-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--green) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .trade-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1rem;
+  }
+  .trade-title { font-size: 0.8rem; color: var(--accent); margin-top: 0.2rem; }
+  .trade-location { font-size: 0.78rem; color: var(--silver-dim); margin-top: 0.2rem; }
+  .trade-skills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+  .skill-tag {
+    background: rgba(184,197,214,0.1); border: 1px solid rgba(184,197,214,0.2);
+    color: rgba(245,239,224,0.8);
+    padding: 0.2rem 0.6rem; border-radius: 3px;
+    font-size: 0.72rem; font-weight: 500;
+  }
+  .trade-footer { display: flex; justify-content: space-between; align-items: center; }
+  .trade-rating { display: flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; }
+  .stars { color: var(--accent); }
+  .trade-contact {
+    background: var(--accent); color: var(--navy);
+    padding: 0.35rem 0.8rem; border-radius: 4px;
+    font-size: 0.78rem; font-weight: 700; border: none; cursor: pointer;
+  }
+  .verified-badge {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-size: 0.7rem; color: #4ACCA0;
+    background: rgba(42,180,120,0.15); padding: 0.15rem 0.4rem; border-radius: 3px;
+  }
+
+  /* PRICING */
+  .pricing-section { background: var(--ash); }
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem; margin-top: 3rem;
+  }
+  .price-card {
+    background: var(--soil); border: 1px solid rgba(184,197,214,0.15);
+    border-radius: 10px; padding: 2rem;
+    position: relative; overflow: hidden;
+  }
+  .price-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(160deg, rgba(74,158,204,0.08) 0%, var(--soil) 60%);
+  }
+  .price-card.featured::before {
+    content: 'Most Popular';
+    position: absolute; top: 1rem; right: -1.5rem;
+    background: var(--accent); color: var(--navy);
+    font-size: 0.7rem; font-weight: 700;
+    padding: 0.25rem 2rem; transform: rotate(35deg);
+    letter-spacing: 0.05em;
+  }
+  .price-tier {
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--silver-dim); margin-bottom: 0.5rem;
+  }
+  .price-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem; font-weight: 800;
+    margin-bottom: 1.2rem;
+  }
+  .price-amount {
+    display: flex; align-items: baseline; gap: 0.3rem;
+    margin-bottom: 1.5rem;
+  }
+  .price-currency { font-size: 1rem; color: var(--silver-dim); }
+  .price-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem; font-weight: 800; line-height: 1;
+    color: var(--accent);
+  }
+  .price-period { font-size: 0.85rem; color: var(--silver-dim); }
+  .price-features { list-style: none; margin-bottom: 2rem; }
+  .price-features li {
+    padding: 0.55rem 0;
+    font-size: 0.875rem;
+    color: rgba(245,239,224,0.75);
+    border-bottom: 1px solid rgba(245,239,224,0.06);
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .price-features li::before { content: '✓'; color: var(--accent); font-weight: 700; }
+  .btn-plan {
+    width: 100%; padding: 0.85rem;
+    font-weight: 700; font-size: 0.9rem;
+    border-radius: 5px; cursor: pointer;
+    border: none; transition: all 0.2s;
+  }
+  .btn-plan-primary { background: var(--accent); color: var(--navy); }
+  .btn-plan-primary:hover { background: var(--accent-light); }
+  .btn-plan-secondary { background: rgba(184,197,214,0.1); color: var(--accent); border: 1px solid rgba(74,158,204,0.3); }
+  .btn-plan-secondary:hover { background: rgba(184,197,214,0.2); }
+
+  /* AD SLOTS */
+  .ad-slots-section { background: var(--soil); }
+  .ad-slots-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; margin-top: 2.5rem;
+  }
+  .ad-slot {
+    border: 2px dashed rgba(184,197,214,0.2);
+    border-radius: 8px; padding: 2rem; text-align: center;
+    background: rgba(74,158,204,0.04);
+    transition: border-color 0.2s;
+  }
+  .ad-slot:hover { border-color: rgba(74,158,204,0.5); }
+  .ad-slot-label {
+    font-size: 0.7rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--silver-dim);
+    margin-bottom: 0.5rem;
+  }
+  .ad-slot-size { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .ad-slot-price { font-size: 0.85rem; color: var(--silver-dim); margin-top: 0.3rem; }
+  .ad-slot-btn {
+    margin-top: 1rem; background: transparent;
+    border: 1px solid rgba(74,158,204,0.3); color: var(--accent);
+    padding: 0.4rem 1rem; border-radius: 4px;
+    font-size: 0.8rem; cursor: pointer;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ash);
+    border-top: 1px solid rgba(184,197,214,0.1);
+    padding: 3rem 4rem 2rem;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 2.5rem;
+  }
+  .footer-brand { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--accent); margin-bottom: 0.8rem; }
+  .footer-brand span { color: var(--cream); }
+  .footer-desc { font-size: 0.85rem; color: var(--silver-dim); line-height: 1.7; }
+  .footer-heading { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--cream); margin-bottom: 1rem; letter-spacing: 0.05em; }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 0.6rem; }
+  .footer-links a { color: var(--silver-dim); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-bottom {
+    border-top: 1px solid rgba(245,239,224,0.06);
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem; color: var(--silver-dim);
+  }
+  .footer-bottom a { color: var(--silver-dim); text-decoration: none; }
+  .footer-bottom a:hover { color: var(--accent); }
+
+  /* ADMIN PANEL */
+  #admin-trigger {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    width: 48px; height: 48px;
+    background: var(--soil);
+    border: 1px solid rgba(184,197,214,0.2);
+    border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; z-index: 200;
+    transition: border-color 0.2s;
+    opacity: 0.4;
+  }
+  #admin-trigger:hover { opacity: 1; border-color: var(--accent); }
+
+  .admin-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(26,18,8,0.95); z-index: 300;
+    overflow-y: auto;
+  }
+  .admin-overlay.active { display: block; }
+  .admin-panel {
+    max-width: 900px; margin: 4rem auto; padding: 3rem;
+    background: var(--ash); border: 1px solid rgba(74,158,204,0.3);
+    border-radius: 12px;
+  }
+  .admin-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 2.5rem; padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(184,197,214,0.15);
+  }
+  .admin-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; }
+  .admin-close {
+    background: transparent; border: 1px solid rgba(245,239,224,0.2);
+    color: var(--cream); padding: 0.4rem 1rem; border-radius: 4px;
+    cursor: pointer; font-size: 0.85rem;
+  }
+  .admin-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+  .admin-tab {
+    padding: 0.5rem 1.2rem; border-radius: 4px;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    border: 1px solid rgba(184,197,214,0.2);
+    background: transparent; color: var(--silver-dim);
+    transition: all 0.2s;
+  }
+  .admin-tab.active { background: var(--accent); color: var(--navy); border-color: var(--accent); }
+  .admin-content { display: none; }
+  .admin-content.active { display: block; }
+
+  /* Auth gate */
+  .auth-gate {
+    text-align: center; padding: 3rem;
+  }
+  .auth-gate h3 { font-family: 'Syne', sans-serif; font-size: 1.4rem; margin-bottom: 0.8rem; }
+  .auth-gate p { color: var(--silver-dim); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .auth-input {
+    background: var(--soil); border: 1px solid rgba(74,158,204,0.3);
+    color: var(--cream); padding: 0.7rem 1rem; border-radius: 5px;
+    font-size: 0.9rem; width: 260px; margin-right: 0.5rem;
+    outline: none;
+  }
+  .auth-input:focus { border-color: var(--accent); }
+  .auth-btn {
+    background: var(--accent); color: var(--navy);
+    padding: 0.7rem 1.5rem; border-radius: 5px;
+    font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer;
+  }
+  .auth-error { color: #e74c3c; font-size: 0.85rem; margin-top: 0.8rem; }
+
+  /* Admin Forms */
+  .admin-section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 700;
+    margin-bottom: 1.5rem; color: var(--accent);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+  .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--silver-dim); letter-spacing: 0.05em; text-transform: uppercase; }
+  .form-control {
+    background: var(--soil); border: 1px solid rgba(184,197,214,0.2);
+    color: var(--cream); padding: 0.65rem 0.9rem; border-radius: 5px;
+    font-size: 0.9rem; outline: none; width: 100%;
+    font-family: 'Inter', sans-serif;
+  }
+  .form-control:focus { border-color: var(--accent); }
+  textarea.form-control { resize: vertical; min-height: 80px; }
+  .save-btn {
+    background: var(--accent); color: var(--navy);
+    padding: 0.7rem 2rem; border-radius: 5px;
+    font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer;
+    margin-top: 0.5rem;
+  }
+  .save-btn:hover { background: var(--accent-light); }
+  .success-msg { color: #2ecc71; font-size: 0.85rem; margin-top: 0.6rem; display: none; }
+
+  /* Admin lists */
+  .admin-list { margin-top: 1rem; }
+  .admin-list-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.8rem 1rem; background: var(--soil);
+    border: 1px solid rgba(184,197,214,0.1); border-radius: 6px;
+    margin-bottom: 0.5rem;
+  }
+  .admin-list-item-info { font-size: 0.875rem; }
+  .admin-list-item-name { font-weight: 600; color: var(--cream); }
+  .admin-list-item-sub { color: var(--silver-dim); font-size: 0.8rem; margin-top: 0.2rem; }
+  .admin-actions { display: flex; gap: 0.5rem; }
+  .btn-edit, .btn-del {
+    padding: 0.3rem 0.7rem; border-radius: 4px;
+    font-size: 0.75rem; font-weight: 600; cursor: pointer; border: none;
+  }
+  .btn-edit { background: rgba(184,197,214,0.15); color: var(--accent); }
+  .btn-del { background: rgba(192,57,43,0.15); color: #e74c3c; }
+
+  /* Stats dashboard */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card {
+    background: var(--soil); border: 1px solid rgba(184,197,214,0.15);
+    border-radius: 8px; padding: 1.2rem;
+    text-align: center;
+  }
+  .stat-card-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--accent); }
+  .stat-card-label { font-size: 0.78rem; color: var(--silver-dim); margin-top: 0.2rem; }
+
+  /* Toggle */
+  .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 0; border-bottom: 1px solid rgba(245,239,224,0.06); }
+  .toggle-label { font-size: 0.9rem; }
+  .toggle-sub { font-size: 0.78rem; color: var(--silver-dim); margin-top: 0.2rem; }
+  .toggle {
+    position: relative; width: 44px; height: 24px;
+    background: rgba(245,239,224,0.15); border-radius: 12px;
+    cursor: pointer; transition: background 0.2s;
+    border: none; flex-shrink: 0;
+  }
+  .toggle.on { background: var(--accent); }
+  .toggle::after {
+    content: ''; position: absolute;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: white; top: 3px; left: 3px;
+    transition: transform 0.2s;
+  }
+  .toggle.on::after { transform: translateX(20px); }
+
+  /* Login screen overlay for admin */
+  .login-screen {
+    position: fixed; inset: 0;
+    background: var(--soil);
+    z-index: 400;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1.5rem;
+  }
+  .login-screen.hidden { display: none; }
+  .login-logo { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--accent); margin-bottom: 0.5rem; }
+  .login-box {
+    background: var(--ash); border: 1px solid rgba(184,197,214,0.2);
+    border-radius: 10px; padding: 2.5rem;
+    width: 380px;
+  }
+  .login-box h2 { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.4rem; }
+  .login-box p { color: var(--silver-dim); font-size: 0.85rem; margin-bottom: 1.5rem; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero, section { padding: 5rem 1.5rem 3rem; }
+    .ad-banner { margin: 0 1.5rem; flex-wrap: wrap; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .admin-panel { margin: 1rem; padding: 1.5rem; }
+    .login-box { width: 90%; }
+    h1 { font-size: 2.4rem; }
+  }
+
+  /* ── PROFILE MODAL ── */
+  .profile-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(10,14,26,0.94); z-index: 500;
+    overflow-y: auto; backdrop-filter: blur(6px);
+  }
+  .profile-overlay.active { display: block; }
+  .profile-modal {
+    max-width: 680px; margin: 3rem auto; padding: 2.5rem;
+    background: var(--navy-mid); border: 1px solid rgba(74,158,204,0.25);
+    border-radius: 14px; position: relative;
+  }
+  .profile-close {
+    position: absolute; top: 1.2rem; right: 1.2rem;
+    background: rgba(184,197,214,0.1); border: 1px solid rgba(184,197,214,0.15);
+    color: var(--cream); width: 32px; height: 32px; border-radius: 50%;
+    cursor: pointer; font-size: 0.9rem; display: flex;
+    align-items: center; justify-content: center; transition: all 0.2s;
+  }
+  .profile-close:hover { background: rgba(74,158,204,0.2); border-color: var(--accent); }
+  .profile-header { display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(184,197,214,0.1); }
+  .profile-avatar-lg {
+    width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--navy-light) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; border: 2px solid rgba(74,158,204,0.3);
+  }
+  .profile-name-block { flex: 1; }
+  .profile-name { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem; }
+  .profile-trade-badge {
+    display: inline-block; background: rgba(74,158,204,0.12);
+    border: 1px solid rgba(74,158,204,0.3); color: var(--accent);
+    padding: 0.25rem 0.7rem; border-radius: 4px;
+    font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem;
+  }
+  .profile-verified-lg {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    background: rgba(74,204,160,0.1); border: 1px solid rgba(74,204,160,0.3);
+    color: #4ACCA0; padding: 0.2rem 0.6rem; border-radius: 4px;
+    font-size: 0.75rem; font-weight: 700; margin-left: 0.4rem;
+  }
+  .profile-location-line { font-size: 0.85rem; color: var(--silver-dim); margin-top: 0.3rem; }
+  .profile-rating-summary {
+    display: flex; align-items: center; gap: 0.5rem; margin-top: 0.6rem;
+  }
+  .profile-stars-lg { color: #F0B429; font-size: 1.1rem; letter-spacing: 0.05em; }
+  .profile-rating-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; }
+  .profile-review-count { font-size: 0.82rem; color: var(--silver-dim); }
+  .profile-contact-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: #25D366; color: #fff;
+    padding: 0.7rem 1.4rem; border-radius: 6px;
+    font-weight: 700; font-size: 0.9rem; text-decoration: none;
+    margin-top: 1rem; transition: opacity 0.2s;
+  }
+  .profile-contact-btn:hover { opacity: 0.88; }
+
+  .profile-section-title {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--accent);
+    margin: 1.5rem 0 0.75rem;
+  }
+  .profile-bio { font-size: 0.92rem; color: rgba(232,239,247,0.75); line-height: 1.7; }
+  .profile-skills-wrap { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .profile-skill-tag {
+    background: rgba(74,158,204,0.08); border: 1px solid rgba(74,158,204,0.2);
+    color: rgba(232,239,247,0.8); padding: 0.25rem 0.65rem;
+    border-radius: 4px; font-size: 0.78rem;
+  }
+  .profile-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .profile-meta-item {
+    background: var(--navy-light); border-radius: 6px; padding: 0.75rem 1rem;
+  }
+  .profile-meta-label { font-size: 0.7rem; color: var(--silver-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.25rem; }
+  .profile-meta-value { font-weight: 600; font-size: 0.9rem; }
+
+  /* ── REVIEWS ── */
+  .reviews-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem; }
+  .review-item {
+    background: var(--navy-light); border-radius: 8px; padding: 1rem 1.1rem;
+    border: 1px solid rgba(184,197,214,0.06);
+  }
+  .review-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+  .review-author { font-weight: 600; font-size: 0.88rem; }
+  .review-stars { color: #F0B429; font-size: 0.85rem; }
+  .review-date { font-size: 0.75rem; color: var(--silver-dim); }
+  .review-text { font-size: 0.85rem; color: rgba(232,239,247,0.7); line-height: 1.6; }
+  .review-form { margin-top: 1rem; background: var(--navy); border: 1px solid rgba(74,158,204,0.15); border-radius: 8px; padding: 1.2rem; }
+  .review-form-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 1rem; color: var(--cream); }
+  .star-picker { display: flex; gap: 0.3rem; margin-bottom: 0.75rem; font-size: 1.5rem; cursor: pointer; }
+  .star-picker span { color: rgba(184,197,214,0.25); transition: color 0.1s; }
+  .star-picker span.lit { color: #F0B429; }
+  .review-input {
+    width: 100%; background: var(--navy-mid);
+    border: 1px solid rgba(184,197,214,0.15); color: var(--cream);
+    padding: 0.65rem 0.9rem; border-radius: 5px;
+    font-size: 0.87rem; font-family: 'Inter', sans-serif;
+    resize: vertical; outline: none; margin-bottom: 0.75rem;
+  }
+  .review-input:focus { border-color: var(--accent); }
+  .review-name-input {
+    width: 100%; background: var(--navy-mid);
+    border: 1px solid rgba(184,197,214,0.15); color: var(--cream);
+    padding: 0.6rem 0.9rem; border-radius: 5px;
+    font-size: 0.87rem; font-family: 'Inter', sans-serif;
+    outline: none; margin-bottom: 0.75rem;
+  }
+  .review-name-input:focus { border-color: var(--accent); }
+  .review-submit-btn {
+    background: var(--accent); color: var(--navy);
+    border: none; padding: 0.65rem 1.4rem; border-radius: 5px;
+    font-weight: 700; font-size: 0.88rem; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .review-submit-btn:hover { background: var(--accent-light); }
+  .rating-bar-wrap { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+  .rating-bar-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.78rem; }
+  .rating-bar-label { width: 30px; text-align: right; color: var(--silver-dim); }
+  .rating-bar-track { flex: 1; height: 5px; background: rgba(184,197,214,0.12); border-radius: 3px; overflow: hidden; }
+  .rating-bar-fill { height: 100%; background: #F0B429; border-radius: 3px; transition: width 0.5s; }
+  .rating-bar-count { width: 20px; color: var(--silver-dim); }
+
+  @media (max-width: 600px) {
+    .profile-modal { margin: 1rem; padding: 1.5rem; }
+    .profile-header { flex-direction: column; }
+    .profile-meta-grid { grid-template-columns: 1fr; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+
+<nav>
+  <a href="index.html" class="nav-logo">TradeLink<span> Caribbean</span></a>
+
+  <div class="nav-links">
+
+    <!-- Browse dropdown -->
+    <div class="nav-dropdown" id="drop-browse">
+      <button class="nav-drop-trigger active" onclick="toggleDrop('browse')">
+        Browse
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="nav-drop-menu">
+        <a href="index.html#trades" class="nav-drop-item">
+          <div class="nav-drop-item-icon">🔨</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Find Tradespeople</span>
+            <span class="nav-drop-item-desc">Search by trade and parish</span>
+          </div>
+        </a>
+        <a href="index.html#quote" class="nav-drop-item">
+          <div class="nav-drop-item-icon">📡</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Post a Job</span>
+            <span class="nav-drop-item-desc">Broadcast to matching tradespeople</span>
+          </div>
+        </a>
+        <a href="index.html#how" class="nav-drop-item">
+          <div class="nav-drop-item-icon">📋</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">How It Works</span>
+            <span class="nav-drop-item-desc">See the process</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- For Tradespeople dropdown -->
+    <div class="nav-dropdown" id="drop-trades">
+      <button class="nav-drop-trigger " onclick="toggleDrop('trades')">
+        For Tradespeople
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="nav-drop-menu">
+        <a href="join.html" class="nav-drop-item">
+          <div class="nav-drop-item-icon">✅</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Register Free</span>
+            <span class="nav-drop-item-desc">Create your profile today</span>
+          </div>
+        </a>
+        <div class="nav-drop-divider"></div>
+        <a href="index.html#pricing" class="nav-drop-item">
+          <div class="nav-drop-item-icon">💳</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Pricing Plans</span>
+            <span class="nav-drop-item-desc">Bronze · Standard · Gold</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Advertise dropdown -->
+    <div class="nav-dropdown" id="drop-adv">
+      <button class="nav-drop-trigger " onclick="toggleDrop('adv')">
+        Advertise
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="nav-drop-menu">
+        <a href="advertise.html" class="nav-drop-item">
+          <div class="nav-drop-item-icon">📢</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Book Ad Space</span>
+            <span class="nav-drop-item-desc">Reach Jamaica's trade audience</span>
+          </div>
+        </a>
+        <a href="index.html#advertise" class="nav-drop-item">
+          <div class="nav-drop-item-icon">📊</div>
+          <div class="nav-drop-item-text">
+            <span class="nav-drop-item-label">Ad Packages</span>
+            <span class="nav-drop-item-desc">View placements and rates</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <a href="join.html" class="nav-cta">Join Free</a>
+  <button class="nav-hamburger" onclick="toggleMobile()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="nav-mobile-menu" id="nav-mobile">
+  <div class="nav-mobile-section">Browse</div>
+  <a href="index.html#trades" class="nav-mobile-item" onclick="closeMobile()">🔨 &nbsp;Find Tradespeople</a>
+  <a href="index.html#quote" class="nav-mobile-item" onclick="closeMobile()">📡 &nbsp;Post a Job</a>
+  <a href="index.html#how" class="nav-mobile-item" onclick="closeMobile()">📋 &nbsp;How It Works</a>
+  <div class="nav-mobile-section">Tradespeople</div>
+  <a href="join.html" class="nav-mobile-item" onclick="closeMobile()">✅ &nbsp;Register Free</a>
+  <a href="index.html#pricing" class="nav-mobile-item" onclick="closeMobile()">💳 &nbsp;Pricing Plans</a>
+  <div class="nav-mobile-section">Advertise</div>
+  <a href="advertise.html" class="nav-mobile-item" onclick="closeMobile()">📢 &nbsp;Book Ad Space</a>
+  <a href="index.html#advertise" class="nav-mobile-item" onclick="closeMobile()">📊 &nbsp;Ad Packages</a>
+  <a href="join.html" class="nav-mobile-cta">Get Started Free →</a>
+</div>
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Jamaica's Skilled Trades Network</div>
+    <h1>The people who<br><em>build</em> Jamaica,<br>finally connected.</h1>
+    <p class="hero-sub">Capital buys land. Permits open doors. But it's the electrician, the mason, the plumber who make it real. TradeLink connects Jamaica's skilled tradespeople with the projects that need them.</p>
+    <div class="hero-actions">
+      <a href="join.html" class="btn-primary">Join as a Tradesman</a>
+      <a href="#trades" class="btn-secondary">Browse Tradesmen</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num" id="hero-count">—</div>
+        <div class="stat-label">Tradesmen Listed</div>
+      </div>
+      <div>
+        <div class="stat-num">8</div>
+        <div class="stat-label">Trade Categories</div>
+      </div>
+      <div>
+        <div class="stat-num">JM</div>
+        <div class="stat-label">Jamaica First</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED AD -->
+<div class="ad-banner" id="featured-ad">
+  <span class="ad-badge">Sponsored</span>
+  <span class="ad-text"><strong>Issa Construction Supplies</strong> — All rebar, cement & lumber in stock. Free delivery over $50,000. Kingston & Montego Bay.</span>
+  <button class="ad-cta">Learn More</button>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-label">The Process</div>
+  <div class="section-title">From search to site visit<br>in 48 hours</div>
+  <p class="section-sub">No more asking around. No more WhatsApp referral chains. Verified tradesmen, real ratings, direct contact.</p>
+  <div class="steps-grid">
+    <div class="step">
+      <span class="step-icon">🔍</span>
+      <div class="step-title">Search by trade & parish</div>
+      <p class="step-desc">Filter by trade type, location, availability, and verified status. Results you can trust.</p>
+    </div>
+    <div class="step">
+      <span class="step-icon">📋</span>
+      <div class="step-title">Review profiles & ratings</div>
+      <p class="step-desc">See completed projects, client reviews, certifications, and response time before you reach out.</p>
+    </div>
+    <div class="step">
+      <span class="step-icon">📞</span>
+      <div class="step-title">Contact directly</div>
+      <p class="step-desc">No middleman. Message or call the tradesman directly through the platform.</p>
+    </div>
+    <div class="step">
+      <span class="step-icon">⭐</span>
+      <div class="step-title">Rate the work</div>
+      <p class="step-desc">Leave an honest review after the job. Build accountability into the trades ecosystem.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRADE PROFILES -->
+<section class="trades-section" id="trades">
+  <div class="section-label">Featured Tradesmen</div>
+  <div class="section-title">Who's on TradeLink</div>
+  <p class="section-sub">A sample of Jamaica's top-rated tradespeople already on the platform.</p>
+  <!-- Search Filters -->
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem;margin-bottom:0;">
+    <select id="filter-trade" style="background:var(--ash);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.6rem 1rem;border-radius:5px;font-size:0.875rem;font-family:'Inter',sans-serif;cursor:pointer;min-width:180px;">
+      <option value="">All Trades</option>
+      <option value="electric">Electrician</option>
+      <option value="plumb">Plumber</option>
+      <option value="mason">Mason</option>
+      <option value="carp">Carpenter</option>
+      <option value="paint">Painter</option>
+      <option value="a/c">A/C & Cooling</option>
+      <option value="weld">Welder</option>
+      <option value="tile">Tiler</option>
+    </select>
+    <select id="filter-parish" style="background:var(--ash);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.6rem 1rem;border-radius:5px;font-size:0.875rem;font-family:'Inter',sans-serif;cursor:pointer;min-width:180px;">
+      <option value="">All Parishes</option>
+      <option>Kingston</option>
+      <option>St. Andrew</option>
+      <option>St. James</option>
+      <option>St. Catherine</option>
+      <option>St. Ann</option>
+      <option>Manchester</option>
+      <option>Westmoreland</option>
+      <option>Clarendon</option>
+      <option>St. Elizabeth</option>
+      <option>Trelawny</option>
+      <option>Hanover</option>
+      <option>Portland</option>
+      <option>St. Thomas</option>
+      <option>St. Mary</option>
+    </select>
+  </div>
+
+  <div class="trades-grid" id="trades-grid">
+    <!-- Loaded dynamically from Supabase -->
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-label">Membership</div>
+  <div class="section-title">Simple, transparent pricing</div>
+  <p class="section-sub">Whether you're a solo tradesman building your reputation or a contractor with a full crew, there's a plan for you.</p>
+  <div class="pricing-grid">
+
+    <div class="price-card">
+      <div class="price-tier">Bronze</div>
+      <div class="price-name">Starter</div>
+      <div class="price-amount">
+        <span class="price-currency">USD</span>
+        <span class="price-num">6</span>
+        <span class="price-period">/month</span>
+      </div>
+      <ul class="price-features">
+        <li>Public profile listing</li>
+        <li>Trade category badge</li>
+        <li>Parish location display</li>
+        <li>WhatsApp contact button</li>
+        <li>Client ratings &amp; reviews</li>
+      </ul>
+      <button class="btn-plan btn-plan-secondary" onclick="window.location.href='join.html?plan=bronze'">Get Started</button>
+    </div>
+
+    <div class="price-card featured">
+      <div class="price-tier">Standard</div>
+      <div class="price-name">Pro Tradesman</div>
+      <div class="price-amount">
+        <span class="price-currency">USD</span>
+        <span class="price-num">10.99</span>
+        <span class="price-period">/month</span>
+      </div>
+      <ul class="price-features">
+        <li>Everything in Bronze</li>
+        <li>Priority search placement</li>
+        <li>Verified badge on profile</li>
+        <li>Featured in trade category</li>
+        <li>Leads forwarded via WhatsApp</li>
+        <li>Monthly performance summary</li>
+      </ul>
+      <button class="btn-plan btn-plan-primary" onclick="window.location.href='join.html?plan=standard'">Join Standard</button>
+    </div>
+
+    <div class="price-card">
+      <div class="price-tier">Gold</div>
+      <div class="price-name">Top Tradesman</div>
+      <div class="price-amount">
+        <span class="price-currency">USD</span>
+        <span class="price-num">20</span>
+        <span class="price-period">/month</span>
+      </div>
+      <ul class="price-features">
+        <li>Everything in Standard</li>
+        <li>Homepage featured placement</li>
+        <li>Gold verified badge</li>
+        <li>Priority lead routing</li>
+        <li>Profile spotlight post (social media)</li>
+        <li>Dedicated support line</li>
+      </ul>
+      <button class="btn-plan btn-plan-secondary" onclick="window.location.href='join.html?plan=gold'">Go Gold</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ADVERTISE -->
+<section class="ad-slots-section" id="advertise">
+  <div class="section-label">Advertising</div>
+  <div class="section-title">Reach Jamaica's<br>builder community</div>
+  <p class="section-sub">Suppliers, hardware stores, material brands, insurance companies — your buyers are already here.</p>
+  <div class="ad-slots-grid">
+    <div class="ad-slot">
+      <div class="ad-slot-label">Tier 2 — Standard</div>
+      <div class="ad-slot-size">Featured Banner</div>
+      <div style="font-size:0.85rem;color:rgba(245,239,224,0.6);margin-top:0.4rem;">Top of homepage — 100% impression rate</div>
+      <div class="ad-slot-price">J$7,000/month</div>
+      <button class="ad-slot-btn" onclick="window.location.href='advertise.html'">Book This Slot</button>
+    </div>
+    <div class="ad-slot">
+      <div class="ad-slot-label">Tier 1 — Premium</div>
+      <div class="ad-slot-size">Trade Category Sponsor</div>
+      <div style="font-size:0.85rem;color:rgba(245,239,224,0.6);margin-top:0.4rem;">Top placement in a specific trade category</div>
+      <div class="ad-slot-price">J$10,000/month</div>
+      <button class="ad-slot-btn" onclick="window.location.href='advertise.html'">Book This Slot</button>
+    </div>
+    <div class="ad-slot">
+      <div class="ad-slot-label">Tier 2 — Standard</div>
+      <div class="ad-slot-size">Profile Sidebar</div>
+      <div style="font-size:0.85rem;color:rgba(245,239,224,0.6);margin-top:0.4rem;">Shown across all tradesman profile cards</div>
+      <div class="ad-slot-price">J$7,000/month</div>
+      <button class="ad-slot-btn" onclick="window.location.href='advertise.html'">Book This Slot</button>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE REQUEST / BROADCAST -->
+<section style="background:var(--navy-mid);border-top:1px solid rgba(184,197,214,0.1);border-bottom:1px solid rgba(184,197,214,0.1);" id="quote">
+  <div class="section-label">Get Connected</div>
+  <div class="section-title">Post a job request</div>
+  <p class="section-sub">Tell us what you need. We find matching tradespeople on the platform and notify them directly via WhatsApp — island wide.</p>
+  <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:2rem;padding:0.8rem 1rem;background:rgba(74,158,204,0.08);border:1px solid rgba(74,158,204,0.2);border-radius:6px;max-width:600px;">
+    <span style="font-size:1.1rem;">📡</span>
+    <span style="font-size:0.85rem;color:rgba(232,239,247,0.75);">Your request is sent directly to registered tradespeople matching your trade and location via WhatsApp.</span>
+  </div>
+  <form id="quote-form" style="max-width:600px;">
+    <div class="form-row">
+      <div class="form-group">
+        <label style="font-size:0.82rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Your Name</label>
+        <input id="qr-name" type="text" class="form-control" placeholder="e.g. Michelle Brown" required>
+      </div>
+      <div class="form-group">
+        <label style="font-size:0.82rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Phone / WhatsApp</label>
+        <input id="qr-phone" type="text" class="form-control" placeholder="876-555-0000" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label style="font-size:0.82rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Trade Needed <span style="color:var(--red)">*</span></label>
+        <select id="qr-trade" class="form-control" required style="background:var(--navy);color:var(--cream);">
+          <option value="">Select a trade...</option>
+          <option>Electrician</option><option>Plumber</option><option>Mason</option>
+          <option>Carpenter</option><option>Painter</option><option>A/C &amp; Cooling Tech</option>
+          <option>Welder</option><option>Tiler</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label style="font-size:0.82rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Parish</label>
+        <select id="qr-parish" class="form-control" style="background:var(--navy);color:var(--cream);">
+          <option value="">Any / Island Wide</option>
+          <option>St. James (Montego Bay)</option><option>Kingston</option><option>St. Andrew</option>
+          <option>St. Catherine</option><option>St. Ann</option><option>Manchester</option>
+          <option>Westmoreland</option><option>Clarendon</option><option>Trelawny</option>
+          <option>Hanover</option><option>St. Elizabeth</option><option>Portland</option>
+          <option>St. Thomas</option><option>St. Mary</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label style="font-size:0.82rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Describe the job</label>
+      <textarea id="qr-message" class="form-control" rows="3" placeholder="e.g. Need an electrician to wire a 3-bedroom house in MoBay. Ready to start next week."></textarea>
+    </div>
+    <button type="submit" class="btn-primary" style="border:none;cursor:pointer;">📡 Broadcast Request</button>
+    <div id="qr-success" style="display:none;margin-top:1.2rem;background:rgba(42,122,90,0.15);border:1px solid #2A7A5A;border-radius:6px;padding:1rem;">
+      <div style="color:#4ACCA0;font-weight:700;margin-bottom:0.3rem;">✓ Request broadcast sent!</div>
+      <div id="qr-matched-count" style="font-size:0.85rem;color:rgba(232,239,247,0.7);"></div>
+    </div>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">TradeLink<span> Caribbean</span></div>
+      <p class="footer-desc">Jamaica's home for skilled tradespeople. Connecting the hands that build the island with the projects that need them.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Platform</div>
+      <ul class="footer-links">
+        <li><a href="#trades">Browse Trades</a></li>
+        <li><a href="#quote">Post a Job</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="advertise.html">Advertise</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Trades</div>
+      <ul class="footer-links">
+        <li><a href="#">Electrical</a></li>
+        <li><a href="#">Plumbing</a></li>
+        <li><a href="#">Masonry</a></li>
+        <li><a href="#">Carpentry</a></li>
+        <li><a href="#">A/C & Cooling</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 TradeLink Caribbean. All rights reserved. Jamaica 🇯🇲</span>
+    <a href="javascript:void(0)" onclick="openAdmin(); return false;" style="opacity:0.3; font-size:0.75rem;">⚙</a>
+  </div>
+</footer>
+
+<!-- ADMIN TRIGGER -->
+<button id="admin-trigger" onclick="openAdmin()" title="Admin">⚙</button>
+
+<!-- ADMIN PANEL -->
+<div class="admin-overlay" id="admin-overlay">
+  <!-- Auth Gate -->
+  <div id="auth-gate" class="admin-panel" style="max-width:480px;margin:8rem auto;padding:2.5rem;text-align:center;">
+    <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--accent);margin-bottom:0.5rem;">Admin Access</div>
+    <p style="color:var(--silver-dim);font-size:0.9rem;margin-bottom:1.5rem;">TradeLink Caribbean — Backdoor Panel</p>
+    <div class="form-group" style="text-align:left;">
+      <label>Password</label>
+      <input type="password" class="form-control" id="admin-password" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')checkAuth()">
+    </div>
+    <button class="save-btn" style="width:100%;margin-top:0.5rem;" onclick="checkAuth()">Enter</button>
+    <div class="auth-error" id="auth-error" style="display:none;">Incorrect password. Try again.</div>
+    <div style="margin-top:1.5rem;">
+      <button onclick="closeAdmin()" style="background:transparent;border:none;color:var(--silver-dim);cursor:pointer;font-size:0.85rem;">← Back to site</button>
+    </div>
+  </div>
+
+  <!-- Main Panel (hidden until auth) -->
+  <div id="admin-main" class="admin-panel" style="display:none;">
+    <div class="admin-header">
+      <div>
+        <div class="admin-title">🔧 Admin Panel</div>
+        <div style="color:var(--silver-dim);font-size:0.85rem;margin-top:0.2rem;">TradeLink Caribbean — Site Management</div>
+      </div>
+      <button class="admin-close" onclick="closeAdmin()">✕ Close</button>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('dashboard')">Dashboard</button>
+      <button class="admin-tab" onclick="switchTab('site')">Site Content</button>
+      <button class="admin-tab" onclick="switchTab('tradesmen')">Tradesmen</button>
+      <button class="admin-tab" onclick="switchTab('ads')">Ads Manager</button>
+      <button class="admin-tab" onclick="switchTab('leads')">Leads</button>
+      <button class="admin-tab" onclick="switchTab('subscriptions')">Subscriptions</button>
+      <button class="admin-tab" onclick="switchTab('settings')">Settings</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="admin-content active" id="tab-dashboard">
+      <div class="admin-section-title">Platform Overview</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-num" id="stat-members">6</div>
+          <div class="stat-card-label">Total Members</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num" id="stat-ads">3</div>
+          <div class="stat-card-label">Active Ads</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num" id="stat-revenue">—</div>
+          <div class="stat-card-label">Pending Payments</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">12</div>
+          <div class="stat-card-label">Trade Categories</div>
+        </div>
+      </div>
+      <div style="background:var(--soil);border:1px solid rgba(184,197,214,0.1);border-radius:8px;padding:1.5rem;">
+        <div style="font-weight:600;margin-bottom:1rem;font-size:0.9rem;">Quick Actions</div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <button class="save-btn" style="font-size:0.82rem;padding:0.5rem 1.2rem;" onclick="switchTab('tradesmen')">+ Add Tradesman</button>
+          <button class="save-btn" style="font-size:0.82rem;padding:0.5rem 1.2rem;background:var(--green-light);" onclick="switchTab('ads')">+ New Ad</button>
+          <button class="save-btn" style="font-size:0.82rem;padding:0.5rem 1.2rem;background:var(--ash);" onclick="switchTab('site')">Edit Homepage</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SITE CONTENT -->
+    <div class="admin-content" id="tab-site">
+      <div class="admin-section-title">Edit Homepage Content</div>
+      <div class="form-group">
+        <label>Hero Headline</label>
+        <input type="text" class="form-control" id="edit-headline" value="The people who build Jamaica, finally connected.">
+      </div>
+      <div class="form-group">
+        <label>Hero Subheading</label>
+        <textarea class="form-control" id="edit-subheading">Capital buys land. Permits open doors. But it's the electrician, the mason, the plumber who make it real. TradeLink connects Jamaica's skilled tradespeople with the projects that need them.</textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Stat 1 — Number</label>
+          <input type="text" class="form-control" id="edit-stat1" value="400+">
+        </div>
+        <div class="form-group">
+          <label>Stat 1 — Label</label>
+          <input type="text" class="form-control" id="edit-stat1-label" value="Verified Tradesmen">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Featured Banner Ad Text</label>
+        <input type="text" class="form-control" id="edit-ad-text" value="Issa Construction Supplies — All rebar, cement & lumber in stock. Free delivery over $50,000. Kingston & Montego Bay.">
+      </div>
+      <button class="save-btn" onclick="saveContent()">Save Changes</button>
+      <div class="success-msg" id="site-success">✓ Changes saved and applied to the homepage.</div>
+    </div>
+
+    <!-- TRADESMEN -->
+    <div class="admin-content" id="tab-tradesmen">
+      <div class="admin-section-title">Add New Tradesman</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" class="form-control" id="new-name" placeholder="e.g. Andre Thompson">
+        </div>
+        <div class="form-group">
+          <label>Trade / Title</label>
+          <input type="text" class="form-control" id="new-trade" placeholder="e.g. Welder & Metal Fabricator">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Location / Parish</label>
+          <input type="text" class="form-control" id="new-location" placeholder="e.g. Kingston & St. Andrew">
+        </div>
+        <div class="form-group">
+          <label>Skills (comma separated)</label>
+          <input type="text" class="form-control" id="new-skills" placeholder="e.g. MIG Welding, Gates, Grilles">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Rating (out of 5)</label>
+          <input type="number" class="form-control" id="new-rating" placeholder="4.8" min="1" max="5" step="0.1">
+        </div>
+        <div class="form-group">
+          <label>Review Count</label>
+          <input type="number" class="form-control" id="new-reviews" placeholder="12">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>WhatsApp / Phone Number</label>
+        <input type="text" class="form-control" id="new-phone" placeholder="e.g. 876-555-0000">
+      </div>
+      <button class="save-btn" onclick="addTradesman()">Add to Platform</button>
+      <div class="success-msg" id="trade-success">✓ Tradesman added to the listings.</div>
+
+      <div style="margin-top:2rem;">
+        <div class="admin-section-title">Current Listings</div>
+        <div class="admin-list" id="admin-trade-list">
+          <div class="admin-list-item">
+            <div class="admin-list-item-info">
+              <div class="admin-list-item-name">Devon Clarke</div>
+              <div class="admin-list-item-sub">Master Electrician · Kingston & St. Andrew</div>
+            </div>
+            <div class="admin-actions">
+              <button class="btn-edit">Edit</button>
+              <button class="btn-del">Remove</button>
+            </div>
+          </div>
+          <div class="admin-list-item">
+            <div class="admin-list-item-info">
+              <div class="admin-list-item-name">Marcus Reid</div>
+              <div class="admin-list-item-sub">Cabinet Maker & Carpenter · Montego Bay</div>
+            </div>
+            <div class="admin-actions">
+              <button class="btn-edit">Edit</button>
+              <button class="btn-del">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADS MANAGER -->
+    <div class="admin-content" id="tab-ads">
+      <div class="admin-section-title">Create New Ad</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Advertiser Name</label>
+          <input type="text" class="form-control" id="ad-name" placeholder="e.g. Courts Jamaica">
+        </div>
+        <div class="form-group">
+          <label>Placement</label>
+          <select class="form-control" id="ad-placement">
+            <option>Featured Banner (Homepage)</option>
+            <option>Trade Category Sponsor</option>
+            <option>Profile Sidebar</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ad Copy / Message</label>
+        <input type="text" class="form-control" id="ad-copy" placeholder="e.g. Courts Jamaica — 0% financing on all tools. Apply today.">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>CTA Button Text</label>
+          <input type="text" class="form-control" id="ad-cta-text" placeholder="e.g. Learn More">
+        </div>
+        <div class="form-group">
+          <label>Monthly Rate (J$)</label>
+          <input type="number" class="form-control" id="ad-rate" placeholder="15000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>CTA Link URL (optional)</label>
+        <input type="text" class="form-control" id="ad-cta-url" placeholder="e.g. https://issasupplies.com">
+      </div>
+      <button class="save-btn" onclick="createAd()">Publish Ad</button>
+      <div class="success-msg" id="ad-success">✓ Ad published and now live on the site.</div>
+
+      <div style="margin-top:2rem;">
+        <div class="admin-section-title">Active Ads</div>
+        <div class="admin-list" id="admin-ads-list">
+          <div class="admin-list-item">
+            <div class="admin-list-item-info">
+              <div class="admin-list-item-name">Issa Construction Supplies</div>
+              <div class="admin-list-item-sub">Featured Banner · J$15,000/month · Active</div>
+            </div>
+            <div class="admin-actions">
+              <button class="btn-edit">Edit</button>
+              <button class="btn-del" onclick="this.closest('.admin-list-item').remove()">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- LEADS (Quote Requests) -->
+    <div class="admin-content" id="tab-leads">
+      <div class="admin-section-title">Quote Requests / Leads</div>
+      <div id="leads-list" style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="color:var(--silver-dim);font-size:0.9rem;">Loading leads...</div>
+      </div>
+    </div>
+
+    <!-- SUBSCRIPTIONS -->
+    <div class="admin-content" id="tab-subscriptions">
+      <div class="admin-section-title">Subscription Registrations</div>
+      <div id="subscriptions-list" style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="color:var(--silver-dim);font-size:0.9rem;">Loading registrations...</div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="admin-content" id="tab-settings">
+      <div class="admin-section-title">Platform Settings</div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Maintenance Mode</div>
+          <div class="toggle-sub">Show a maintenance page to all visitors</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">New Registrations</div>
+          <div class="toggle-sub">Allow new tradesmen to sign up</div>
+        </div>
+        <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Show Ad Banners</div>
+          <div class="toggle-sub">Display sponsored content on the site</div>
+        </div>
+        <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Review Moderation</div>
+          <div class="toggle-sub">Require approval before reviews go public</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+
+      <div style="margin-top:2.5rem;">
+        <div class="admin-section-title">Change Admin Password</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" class="form-control" id="new-pass" placeholder="Enter new password">
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" class="form-control" id="confirm-pass" placeholder="Confirm new password">
+          </div>
+        </div>
+        <button class="save-btn" onclick="changePassword()">Update Password</button>
+        <div class="success-msg" id="pass-success">✓ Password updated successfully.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SUBSCRIPTION MODAL -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="subscribe-overlay" style="display:none;position:fixed;inset:0;background:rgba(26,18,8,0.96);z-index:400;overflow-y:auto;">
+  <div style="max-width:520px;margin:5rem auto;padding:2.5rem;background:var(--ash);border:1px solid rgba(74,158,204,0.35);border-radius:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(184,197,214,0.15);">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent);">Join TradeLink</div>
+        <div id="sub-plan-label" style="color:var(--silver-dim);font-size:0.85rem;margin-top:0.2rem;"></div>
+      </div>
+      <button onclick="closeSubscribeModal()" style="background:transparent;border:1px solid rgba(245,239,224,0.2);color:var(--cream);padding:0.4rem 1rem;border-radius:4px;cursor:pointer;">✕ Close</button>
+    </div>
+
+    <!-- Lynk Payment Instructions -->
+    <div style="background:rgba(74,158,204,0.08);border:1px solid rgba(184,197,214,0.2);border-radius:8px;padding:1.2rem;margin-bottom:1.5rem;">
+      <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:0.6rem;">💳 How to Pay</div>
+      <div style="font-size:0.88rem;color:rgba(245,239,224,0.8);line-height:1.7;">
+        Send your monthly payment via <strong style="color:var(--cream);">Lynk</strong> to:<br>
+        <span style="font-family:'Syne',sans-serif;font-size:1.1rem;color:var(--accent);font-weight:700;">@tradelinkcaribbean</span><br>
+        <span style="font-size:0.8rem;color:var(--silver-dim);">Or bank transfer — details provided after registration.</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <label style="font-size:0.8rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Full Name *</label>
+        <input id="sub-name" type="text" placeholder="e.g. Andre Thompson" style="width:100%;background:var(--soil);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.65rem 0.9rem;border-radius:5px;font-size:0.9rem;font-family:'Inter',sans-serif;">
+      </div>
+      <div>
+        <label style="font-size:0.8rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">WhatsApp / Phone *</label>
+        <input id="sub-phone" type="text" placeholder="876-555-0000" style="width:100%;background:var(--soil);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.65rem 0.9rem;border-radius:5px;font-size:0.9rem;font-family:'Inter',sans-serif;">
+      </div>
+      <div>
+        <label style="font-size:0.8rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Your Trade *</label>
+        <select id="sub-trade" style="width:100%;background:var(--soil);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.65rem 0.9rem;border-radius:5px;font-size:0.9rem;font-family:'Inter',sans-serif;">
+          <option value="">Select your trade...</option>
+          <option>Electrician</option>
+          <option>Plumber</option>
+          <option>Mason</option>
+          <option>Tiler</option>
+          <option>Welder</option>
+          <option>Carpenter</option>
+          <option>Painter</option>
+          <option>A/C &amp; Cooling Tech</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:0.8rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Parish</label>
+        <select id="sub-parish" style="width:100%;background:var(--soil);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.65rem 0.9rem;border-radius:5px;font-size:0.9rem;font-family:'Inter',sans-serif;">
+          <option value="">Select parish...</option>
+          <option>Montego Bay / St. James</option>
+          <option>Kingston / St. Andrew</option>
+          <option>St. Catherine</option>
+          <option>St. Ann</option>
+          <option>Manchester</option>
+          <option>Westmoreland</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <input type="hidden" id="sub-plan">
+      <button onclick="submitSubscription()" style="background:var(--accent);color:var(--navy);border:none;padding:0.9rem;border-radius:5px;font-weight:700;font-size:0.95rem;cursor:pointer;width:100%;margin-top:0.5rem;">Submit Registration</button>
+      <div id="sub-success" style="display:none;background:rgba(42,74,46,0.2);border:1px solid var(--green-light);border-radius:6px;padding:1rem;text-align:center;color:var(--green-light);font-weight:600;">
+        ✓ Registration received! We'll WhatsApp you with payment confirmation within 24 hours.
+      </div>
+      <div id="sub-error" style="display:none;color:var(--red);font-size:0.85rem;text-align:center;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ADVERTISER ENQUIRY MODAL -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="advertiser-overlay" style="display:none;position:fixed;inset:0;background:rgba(26,18,8,0.96);z-index:400;overflow-y:auto;">
+  <div style="max-width:520px;margin:5rem auto;padding:2.5rem;background:var(--ash);border:1px solid rgba(74,158,204,0.35);border-radius:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(184,197,214,0.15);">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent);">Book Ad Space</div>
+        <div id="adv-placement-label" style="color:var(--silver-dim);font-size:0.85rem;margin-top:0.2rem;"></div>
+      </div>
+      <button onclick="closeAdvertiserModal()" style="background:transparent;border:1px solid rgba(245,239,224,0.2);color:var(--cream);padding:0.4rem 1rem;border-radius:4px;cursor:pointer;">✕ Close</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <label style="font-size:0.8rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Business Name *</label>
+        <input id="adv-business" type="text" placeholder="e.g. Issa Construction Supplies" style="width:100%;background:var(--soil);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.65rem 0.9rem;border-radius:5px;font-size:0.9rem;font-family:'Inter',sans-serif;">
+      </div>
+      <div>
+        <label style="font-size:0.8rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Contact Name</label>
+        <input id="adv-contact" type="text" placeholder="e.g. Michelle Brown" style="width:100%;background:var(--soil);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.65rem 0.9rem;border-radius:5px;font-size:0.9rem;font-family:'Inter',sans-serif;">
+      </div>
+      <div>
+        <label style="font-size:0.8rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Phone / WhatsApp *</label>
+        <input id="adv-phone" type="text" placeholder="876-555-0000" style="width:100%;background:var(--soil);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.65rem 0.9rem;border-radius:5px;font-size:0.9rem;font-family:'Inter',sans-serif;">
+      </div>
+      <div>
+        <label style="font-size:0.8rem;color:var(--silver-dim);font-weight:600;display:block;margin-bottom:0.4rem;">Tell us about your business (optional)</label>
+        <textarea id="adv-message" rows="3" placeholder="What product or service are you promoting?" style="width:100%;background:var(--soil);border:1px solid rgba(184,197,214,0.2);color:var(--cream);padding:0.65rem 0.9rem;border-radius:5px;font-size:0.9rem;font-family:'Inter',sans-serif;resize:vertical;"></textarea>
+      </div>
+      <input type="hidden" id="adv-placement">
+      <input type="hidden" id="adv-tier">
+      <button onclick="submitAdvertiserEnquiry()" style="background:var(--green-light);color:var(--cream);border:none;padding:0.9rem;border-radius:5px;font-weight:700;font-size:0.95rem;cursor:pointer;width:100%;margin-top:0.5rem;">Send Enquiry</button>
+      <div id="adv-success" style="display:none;background:rgba(42,74,46,0.2);border:1px solid var(--green-light);border-radius:6px;padding:1rem;text-align:center;color:var(--green-light);font-weight:600;">
+        ✓ Enquiry received! We'll be in touch within 24 hours to confirm your ad slot.
+      </div>
+      <div id="adv-error" style="display:none;color:var(--red);font-size:0.85rem;text-align:center;"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PROFILE MODAL -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="profile-overlay" id="profile-overlay" onclick="handleProfileOverlayClick(event)">
+  <div class="profile-modal" id="profile-modal">
+    <button class="profile-close" onclick="closeProfile()">✕</button>
+
+    <!-- Header -->
+    <div class="profile-header">
+      <div class="profile-avatar-lg" id="pm-avatar">🔨</div>
+      <div class="profile-name-block">
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <div class="profile-name" id="pm-name"></div>
+          <span class="profile-verified-lg" id="pm-verified" style="display:none;">✓ Verified</span>
+        </div>
+        <div class="profile-trade-badge" id="pm-trade"></div>
+        <div class="profile-location-line" id="pm-location"></div>
+        <div class="profile-rating-summary">
+          <span class="profile-stars-lg" id="pm-stars"></span>
+          <span class="profile-rating-num" id="pm-rating-num"></span>
+          <span class="profile-review-count" id="pm-review-count"></span>
+        </div>
+        <a class="profile-contact-btn" id="pm-whatsapp" href="#" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.862L.054 23.785a.5.5 0 0 0 .61.61l5.923-1.479A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.96 0-3.807-.572-5.362-1.56l-.383-.24-3.979.993.993-3.98-.24-.383A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    <div id="pm-bio-section" style="display:none;">
+      <div class="profile-section-title">About</div>
+      <div class="profile-bio" id="pm-bio"></div>
+    </div>
+
+    <!-- Skills -->
+    <div id="pm-skills-section" style="display:none;">
+      <div class="profile-section-title">Skills</div>
+      <div class="profile-skills-wrap" id="pm-skills"></div>
+    </div>
+
+    <!-- Meta -->
+    <div class="profile-section-title">Details</div>
+    <div class="profile-meta-grid" id="pm-meta"></div>
+
+    <!-- Rating Breakdown -->
+    <div id="pm-rating-section">
+      <div class="profile-section-title">Ratings & Reviews</div>
+      <div class="rating-bar-wrap" id="pm-rating-bars"></div>
+      <div class="reviews-list" id="pm-reviews-list">
+        <div style="color:var(--silver-dim);font-size:0.85rem;">Loading reviews...</div>
+      </div>
+    </div>
+
+    <!-- Leave a Review -->
+    <div class="review-form" id="pm-review-form">
+      <div class="review-form-title">Leave a Review</div>
+      <div class="star-picker" id="star-picker">
+        <span data-val="1">★</span>
+        <span data-val="2">★</span>
+        <span data-val="3">★</span>
+        <span data-val="4">★</span>
+        <span data-val="5">★</span>
+      </div>
+      <input type="text" class="review-name-input" id="review-author-input" placeholder="Your name (e.g. Michelle B.)">
+      <textarea class="review-input" id="review-text-input" rows="3" placeholder="Tell others about the work — quality, professionalism, timeliness..."></textarea>
+      <button class="review-submit-btn" onclick="submitReview()">Post Review</button>
+      <div id="review-success" style="display:none;margin-top:0.6rem;font-size:0.85rem;color:#4ACCA0;font-weight:600;">✓ Review submitted! It will appear after approval.</div>
+      <div id="review-error" style="display:none;margin-top:0.6rem;font-size:0.85rem;color:var(--red);"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // ─── Supabase Config ───
+  const SUPABASE_URL = 'https://cqvawtpgvcmiyyldnnyu.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_px1LGLEM7OE1VB-b7RvPvg_8T7HPZUZ';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ─── Admin Auth ───
+  let ADMIN_PASSWORD = 'tradelink2026';
+  let isAuthenticated = false;
+
+  // ─── Helpers ───
+  function starsHTML(rating) {
+    const r = parseFloat(rating) || 0;
+    if (r >= 4.9) return '★★★★★';
+    if (r >= 4.5) return '★★★★½';
+    if (r >= 3.5) return '★★★★';
+    return '★★★';
+  }
+
+  function tradeIcon(trade) {
+    const t = (trade || '').toLowerCase();
+    if (t.includes('electric')) return '🔌';
+    if (t.includes('plumb')) return '🔧';
+    if (t.includes('mason') || t.includes('concrete')) return '🧱';
+    if (t.includes('carp') || t.includes('cabinet')) return '🪵';
+    if (t.includes('paint')) return '🎨';
+    if (t.includes('a/c') || t.includes('refrig') || t.includes('cooling')) return '❄️';
+    if (t.includes('weld')) return '⚙️';
+    if (t.includes('tile')) return '🏠';
+    return '🔨';
+  }
+
+  // ─── Render a single tradesman card ───
+  function renderCard(t) {
+    const skills = (t.skills || []).slice(0, 3).map(s => `<span class="skill-tag">${s}</span>`).join('');
+    const verifiedBadge = t.verified
+      ? `<span class="verified-badge" title="Verified TradeLink Member">✓ Verified</span>`
+      : '';
+    const rating = parseFloat(t.rating) || 0;
+    const reviewCount = t.review_count || 0;
+    const ratingDisplay = rating > 0 ? rating.toFixed(1) : 'New';
+    const planBadge = t.subscription_tier === 'gold'
+      ? '<span style="font-size:0.65rem;background:rgba(240,180,41,0.15);border:1px solid rgba(240,180,41,0.4);color:#F0B429;padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.3rem;">GOLD</span>'
+      : t.subscription_tier === 'standard'
+        ? '<span style="font-size:0.65rem;background:rgba(74,158,204,0.12);border:1px solid rgba(74,158,204,0.3);color:var(--accent);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.3rem;">PRO</span>'
+        : '';
+
+    return `
+      <div class="trade-card" data-id="${t.id}" onclick="openProfile('${t.id}')" style="cursor:pointer;">
+        <div class="trade-card-header">
+          <div class="trade-avatar" style="background:linear-gradient(135deg,var(--accent),var(--navy-light))">${tradeIcon(t.trade_title)}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="trade-name">${t.full_name}${planBadge}</div>
+            <div class="trade-title">${t.trade_title}</div>
+            <div class="trade-location">📍 ${t.location || 'Jamaica'}</div>
+          </div>
+        </div>
+        <div class="trade-skills">${skills}${(t.skills||[]).length > 3 ? `<span class="skill-tag" style="opacity:0.5;">+${(t.skills||[]).length-3} more</span>` : ''}</div>
+        <div class="trade-footer">
+          <div class="trade-rating">
+            <span class="stars">${rating >= 4.9 ? '★★★★★' : rating >= 4.5 ? '★★★★½' : rating >= 3.5 ? '★★★★' : rating > 0 ? '★★★' : '☆☆☆☆☆'}</span>
+            <span style="color:var(--silver-dim)">${ratingDisplay}${reviewCount > 0 ? ' (' + reviewCount + ')' : ''}</span>
+            ${verifiedBadge}
+          </div>
+          <button onclick="event.stopPropagation();openProfile('${t.id}')" class="trade-contact">View Profile</button>
+        </div>
+      </div>`;
+  }
+
+    // ─── Load & render tradesmen from Supabase ───
+  async function loadTradesmen(filters = {}) {
+    const grid = document.getElementById('trades-grid');
+    grid.innerHTML = '<div style="color:var(--silver-dim);padding:2rem;grid-column:1/-1;text-align:center;">Loading...</div>';
+
+    let query = supabase.from('tradesmen').select('*').eq('active', true).order('verified', { ascending: false }).order('rating', { ascending: false });
+
+    if (filters.trade) query = query.ilike('trade_title', `%${filters.trade}%`);
+    if (filters.parish) query = query.ilike('location', `%${filters.parish}%`);
+
+    const { data, error } = await query;
+
+    if (error) {
+      grid.innerHTML = `<div style="color:var(--red);padding:2rem;grid-column:1/-1;text-align:center;">Could not load tradesmen. Check your connection.</div>`;
+      console.error(error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;">
+          <div style="font-size:2.5rem;margin-bottom:1rem;">🔨</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--accent);margin-bottom:0.5rem;">
+            ${document.getElementById('filter-trade')?.value || document.getElementById('filter-parish')?.value ? 'No results for this filter' : 'Listings coming soon'}
+          </div>
+          <div style="color:var(--silver-dim);font-size:0.9rem;max-width:400px;margin:0 auto 1.5rem;line-height:1.6;">
+            ${document.getElementById('filter-trade')?.value || document.getElementById('filter-parish')?.value 
+              ? 'Try clearing your filters to see all available tradespeople.' 
+              : 'We're onboarding Jamaica's best tradespeople right now. Be among the first — register your profile today.'}
+          </div>
+          ${!document.getElementById('filter-trade')?.value && !document.getElementById('filter-parish')?.value 
+            ? '<a href="join.html" style="display:inline-block;background:var(--accent);color:var(--navy);padding:0.75rem 1.75rem;border-radius:5px;font-weight:700;text-decoration:none;font-size:0.9rem;">Register as a Tradesman</a>' 
+            : '<button onclick="document.getElementById('filter-trade').value='';document.getElementById('filter-parish').value='';loadTradesmen();" style="background:transparent;border:1px solid rgba(74,158,204,0.3);color:var(--accent);padding:0.6rem 1.2rem;border-radius:5px;cursor:pointer;font-size:0.85rem;">Clear Filters</button>'}
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = data.map(renderCard).join('');
+
+    // Update live member count in hero
+    const heroCount = document.getElementById('hero-count');
+    if (heroCount) heroCount.textContent = data.length > 0 ? data.length + (data.length >= 10 ? '+' : '') : '—';
+  }
+
+  // ─── Search filter ───
+  function applySearch() {
+    const trade = document.getElementById('filter-trade')?.value || '';
+    const parish = document.getElementById('filter-parish')?.value || '';
+    loadTradesmen({ trade, parish });
+  }
+
+  // ─── Load ads from Supabase ───
+  async function loadFeaturedAd() {
+    const { data, error } = await supabase
+      .from('ads')
+      .select('*')
+      .eq('active', true)
+      .eq('placement', 'Featured Banner')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error || !data) return; // keep default hardcoded ad if none in DB
+
+    const adEl = document.querySelector('#featured-ad .ad-text');
+    const ctaBtn = document.querySelector('#featured-ad .ad-cta');
+    if (adEl) adEl.innerHTML = `<strong>${data.advertiser_name}</strong> — ${data.copy}`;
+    if (ctaBtn) {
+      ctaBtn.textContent = data.cta_text || 'Learn More';
+      if (data.cta_url) ctaBtn.onclick = () => window.open(data.cta_url, '_blank');
+    }
+  }
+
+  // ─── Load admin dashboard stats ───
+  async function loadAdminStats() {
+    const [{ count: memberCount }, { count: adCount }, { count: pendingCount }, { count: leadCount }] = await Promise.all([
+      supabase.from('tradesmen').select('*', { count: 'exact', head: true }).eq('active', true),
+      supabase.from('ads').select('*', { count: 'exact', head: true }).eq('active', true),
+      supabase.from('subscription_registrations').select('*', { count: 'exact', head: true }).eq('payment_confirmed', false),
+      supabase.from('quote_requests').select('*', { count: 'exact', head: true }).eq('status', 'new')
+    ]);
+    const statEl = document.getElementById('stat-members');
+    const adStatEl = document.getElementById('stat-ads');
+    const revenueEl = document.getElementById('stat-revenue');
+    if (statEl) statEl.textContent = memberCount || 0;
+    if (adStatEl) adStatEl.textContent = adCount || 0;
+    if (revenueEl) revenueEl.textContent = (pendingCount || 0) + ' pending · ' + (leadCount || 0) + ' new leads';
+  }
+
+  // ─── Load admin tradesman list ───
+  async function loadAdminTradeList() {
+    const { data } = await supabase.from('tradesmen').select('id,full_name,trade_title,location,active').order('created_at', { ascending: false });
+    const list = document.getElementById('admin-trade-list');
+    if (!list || !data) return;
+    list.innerHTML = data.map(t => `
+      <div class="admin-list-item" data-id="${t.id}">
+        <div class="admin-list-item-info">
+          <div class="admin-list-item-name">${t.full_name}</div>
+          <div class="admin-list-item-sub">${t.trade_title} · ${t.location} · ${t.active ? 'Active' : 'Hidden'}</div>
+        </div>
+        <div class="admin-actions">
+          <button class="btn-del" onclick="removeTradesman('${t.id}', this)">Remove</button>
+        </div>
+      </div>`).join('');
+  }
+
+  // ─── Load admin ads list ───
+  async function loadAdminAdsList() {
+    const { data } = await supabase.from('ads').select('*').order('created_at', { ascending: false });
+    const list = document.getElementById('admin-ads-list');
+    if (!list || !data) return;
+    list.innerHTML = data.map(a => `
+      <div class="admin-list-item" data-id="${a.id}">
+        <div class="admin-list-item-info">
+          <div class="admin-list-item-name">${a.advertiser_name}</div>
+          <div class="admin-list-item-sub">${a.placement} · J$${parseInt(a.monthly_rate||0).toLocaleString()}/month · ${a.active ? 'Active' : 'Paused'}</div>
+        </div>
+        <div class="admin-actions">
+          <button class="btn-del" onclick="removeAd('${a.id}', this)">Remove</button>
+        </div>
+      </div>`).join('');
+  }
+
+  // ─── Add Tradesman → Supabase ───
+  async function addTradesman() {
+    const name = document.getElementById('new-name').value.trim();
+    const trade = document.getElementById('new-trade').value.trim();
+    const location = document.getElementById('new-location').value.trim();
+    const skillsRaw = document.getElementById('new-skills').value.trim();
+    const rating = parseFloat(document.getElementById('new-rating').value) || 5.0;
+    const reviews = parseInt(document.getElementById('new-reviews').value) || 0;
+    const phone = document.getElementById('new-phone')?.value.trim() || '';
+
+    if (!name || !trade) return alert('Name and trade are required.');
+
+    const skills = skillsRaw ? skillsRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+    const { data, error } = await supabase.from('tradesmen').insert([{
+      full_name: name,
+      trade_title: trade,
+      location: location,
+      skills: skills,
+      rating: rating,
+      review_count: reviews,
+      phone: phone,
+      verified: false,
+      active: true
+    }]).select().single();
+
+    if (error) {
+      alert('Error saving tradesman: ' + error.message);
+      console.error(error);
+      return;
+    }
+
+    // Refresh grid and admin list
+    await loadTradesmen();
+    await loadAdminTradeList();
+    await loadAdminStats();
+
+    ['new-name','new-trade','new-location','new-skills','new-rating','new-reviews','new-phone']
+      .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+
+    document.getElementById('trade-success').style.display = 'block';
+    setTimeout(() => document.getElementById('trade-success').style.display = 'none', 3000);
+  }
+
+  // ─── Remove Tradesman ───
+  async function removeTradesman(id, btn) {
+    if (!confirm('Remove this tradesman from the platform?')) return;
+    const { error } = await supabase.from('tradesmen').update({ active: false }).eq('id', id);
+    if (error) { alert('Error: ' + error.message); return; }
+    btn.closest('.admin-list-item').remove();
+    await loadTradesmen();
+    await loadAdminStats();
+  }
+
+  // ─── Create Ad → Supabase ───
+  async function createAd() {
+    const name = document.getElementById('ad-name').value.trim();
+    const placement = document.getElementById('ad-placement').value;
+    const copy = document.getElementById('ad-copy').value.trim();
+    const ctaText = document.getElementById('ad-cta-text').value.trim() || 'Learn More';
+    const ctaUrl = document.getElementById('ad-cta-url')?.value.trim() || '';
+    const rate = parseInt(document.getElementById('ad-rate').value) || 0;
+
+    if (!name || !copy) return alert('Advertiser name and ad copy are required.');
+
+    const { error } = await supabase.from('ads').insert([{
+      advertiser_name: name,
+      placement: placement,
+      copy: copy,
+      cta_text: ctaText,
+      cta_url: ctaUrl,
+      monthly_rate: rate,
+      active: true
+    }]);
+
+    if (error) { alert('Error saving ad: ' + error.message); return; }
+
+    await loadFeaturedAd();
+    await loadAdminAdsList();
+    await loadAdminStats();
+
+    ['ad-name','ad-copy','ad-cta-text','ad-cta-url','ad-rate'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.value = '';
+    });
+
+    document.getElementById('ad-success').style.display = 'block';
+    setTimeout(() => document.getElementById('ad-success').style.display = 'none', 3000);
+  }
+
+  // ─── Remove Ad ───
+  async function removeAd(id, btn) {
+    if (!confirm('Remove this ad?')) return;
+    const { error } = await supabase.from('ads').update({ active: false }).eq('id', id);
+    if (error) { alert('Error: ' + error.message); return; }
+    btn.closest('.admin-list-item').remove();
+    await loadAdminStats();
+  }
+
+
+  // ═══════════════════════════════════════════════════
+  // PROFILE MODAL
+  // ═══════════════════════════════════════════════════
+  let currentProfileId = null;
+  let selectedReviewStar = 0;
+
+  function starsFromRating(r, size) {
+    const filled = Math.round(parseFloat(r) || 0);
+    return Array.from({length: 5}, (_, i) => 
+      `<span style="color:${i < filled ? '#F0B429' : 'rgba(184,197,214,0.2)'}">${size === 'sm' ? '★' : '★'}</span>`
+    ).join('');
+  }
+
+  async function openProfile(id) {
+    currentProfileId = id;
+    selectedReviewStar = 0;
+    document.getElementById('profile-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    resetReviewForm();
+
+    // Fetch tradesman
+    const { data: t, error } = await supabase.from('tradesmen').select('*').eq('id', id).single();
+    if (error || !t) return;
+
+    // Fill header
+    document.getElementById('pm-avatar').textContent = tradeIcon(t.trade_title);
+    document.getElementById('pm-name').textContent = t.full_name;
+    document.getElementById('pm-trade').textContent = t.trade_title;
+    document.getElementById('pm-location').textContent = '📍 ' + (t.location || 'Jamaica');
+    const verEl = document.getElementById('pm-verified');
+    verEl.style.display = t.verified ? 'inline-flex' : 'none';
+
+    // Fetch real reviews to compute live rating
+    await loadProfileReviews(id, t);
+
+    // WhatsApp
+    const phone = (t.phone || '').replace(/\D/g, '');
+    document.getElementById('pm-whatsapp').href = `https://wa.me/1876${phone}`;
+
+    // Bio
+    const bioSec = document.getElementById('pm-bio-section');
+    if (t.bio) {
+      document.getElementById('pm-bio').textContent = t.bio;
+      bioSec.style.display = 'block';
+    } else { bioSec.style.display = 'none'; }
+
+    // Skills
+    const skillSec = document.getElementById('pm-skills-section');
+    const skills = t.skills || [];
+    if (skills.length > 0) {
+      document.getElementById('pm-skills').innerHTML = skills.map(s => `<span class="profile-skill-tag">${s}</span>`).join('');
+      skillSec.style.display = 'block';
+    } else { skillSec.style.display = 'none'; }
+
+    // Meta grid
+    const planLabels = { free: 'Free Listing', bronze: 'Bronze Member', standard: 'Standard Member', gold: 'Gold Member' };
+    document.getElementById('pm-meta').innerHTML = `
+      <div class="profile-meta-item"><div class="profile-meta-label">Experience</div><div class="profile-meta-value">${t.experience || 'Not specified'}</div></div>
+      <div class="profile-meta-item"><div class="profile-meta-label">Membership</div><div class="profile-meta-value">${planLabels[t.subscription_tier] || 'Listed'}</div></div>
+      <div class="profile-meta-item"><div class="profile-meta-label">Coverage</div><div class="profile-meta-value">${t.location || 'Jamaica'}</div></div>
+      <div class="profile-meta-item"><div class="profile-meta-label">Member Since</div><div class="profile-meta-value">${new Date(t.created_at).toLocaleDateString('en-JM', {month:'short', year:'numeric'})}</div></div>
+    `;
+  }
+
+  async function loadProfileReviews(tradesmanId, t) {
+    const { data: reviews } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('tradesman_id', tradesmanId)
+      .eq('approved', true)
+      .order('created_at', { ascending: false });
+
+    const list = reviews || [];
+    const count = list.length;
+    const avg = count > 0 ? (list.reduce((s, r) => s + r.rating, 0) / count) : parseFloat(t.rating || 0);
+    const displayCount = count > 0 ? count : (t.review_count || 0);
+    const displayAvg = avg > 0 ? avg.toFixed(1) : (t.rating || '—');
+
+    // Stars display
+    document.getElementById('pm-stars').innerHTML = count > 0 || t.rating
+      ? starsFromRating(avg, 'lg') : '<span style="color:rgba(184,197,214,0.3)">☆☆☆☆☆</span>';
+    document.getElementById('pm-rating-num').textContent = parseFloat(displayAvg) > 0 ? displayAvg : '';
+    document.getElementById('pm-review-count').textContent = displayCount > 0 ? `(${displayCount} review${displayCount !== 1 ? 's' : ''})` : 'No reviews yet';
+
+    // Rating breakdown bars (only if real reviews exist)
+    const barsEl = document.getElementById('pm-rating-bars');
+    if (count > 0) {
+      const dist = [5,4,3,2,1].map(star => ({ star, n: list.filter(r => r.rating === star).length }));
+      barsEl.innerHTML = dist.map(d => `
+        <div class="rating-bar-row">
+          <div class="rating-bar-label">${d.star}★</div>
+          <div class="rating-bar-track"><div class="rating-bar-fill" style="width:${count > 0 ? Math.round((d.n/count)*100) : 0}%"></div></div>
+          <div class="rating-bar-count">${d.n}</div>
+        </div>`).join('');
+    } else {
+      barsEl.innerHTML = '';
+    }
+
+    // Review list
+    const reviewsEl = document.getElementById('pm-reviews-list');
+    if (list.length === 0) {
+      reviewsEl.innerHTML = '<div style="color:var(--silver-dim);font-size:0.85rem;padding:0.5rem 0;">No reviews yet — be the first to leave one.</div>';
+    } else {
+      reviewsEl.innerHTML = list.slice(0, 10).map(r => `
+        <div class="review-item">
+          <div class="review-top">
+            <span class="review-author">${r.reviewer_name}</span>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <span class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+              <span class="review-date">${new Date(r.created_at).toLocaleDateString('en-JM', {month:'short', day:'numeric', year:'numeric'})}</span>
+            </div>
+          </div>
+          ${r.comment ? `<div class="review-text">${r.comment}</div>` : ''}
+        </div>`).join('');
+    }
+  }
+
+  function closeProfile() {
+    document.getElementById('profile-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+    currentProfileId = null;
+  }
+
+  function handleProfileOverlayClick(e) {
+    if (e.target === document.getElementById('profile-overlay')) closeProfile();
+  }
+
+  // ── STAR PICKER ──
+  document.addEventListener('DOMContentLoaded', () => {
+    const picker = document.getElementById('star-picker');
+    if (!picker) return;
+    picker.querySelectorAll('span').forEach(star => {
+      star.addEventListener('mouseover', () => {
+        const val = parseInt(star.dataset.val);
+        picker.querySelectorAll('span').forEach((s, i) => {
+          s.classList.toggle('lit', i < val);
+        });
+      });
+      star.addEventListener('click', () => {
+        selectedReviewStar = parseInt(star.dataset.val);
+        picker.querySelectorAll('span').forEach((s, i) => {
+          s.classList.toggle('lit', i < selectedReviewStar);
+        });
+      });
+    });
+    picker.addEventListener('mouseleave', () => {
+      picker.querySelectorAll('span').forEach((s, i) => {
+        s.classList.toggle('lit', i < selectedReviewStar);
+      });
+    });
+  });
+
+  function resetReviewForm() {
+    selectedReviewStar = 0;
+    const picker = document.getElementById('star-picker');
+    if (picker) picker.querySelectorAll('span').forEach(s => s.classList.remove('lit'));
+    const nameEl = document.getElementById('review-author-input');
+    const textEl = document.getElementById('review-text-input');
+    if (nameEl) nameEl.value = '';
+    if (textEl) textEl.value = '';
+    const suc = document.getElementById('review-success');
+    const err = document.getElementById('review-error');
+    if (suc) suc.style.display = 'none';
+    if (err) err.style.display = 'none';
+  }
+
+  async function submitReview() {
+    const reviewer = document.getElementById('review-author-input')?.value.trim();
+    const comment = document.getElementById('review-text-input')?.value.trim();
+    const errEl = document.getElementById('review-error');
+    const sucEl = document.getElementById('review-success');
+
+    errEl.style.display = 'none';
+    if (!selectedReviewStar) { errEl.textContent = 'Please select a star rating.'; errEl.style.display = 'block'; return; }
+    if (!reviewer) { errEl.textContent = 'Please enter your name.'; errEl.style.display = 'block'; return; }
+    if (!currentProfileId) return;
+
+    const { error } = await supabase.from('reviews').insert([{
+      tradesman_id: currentProfileId,
+      reviewer_name: reviewer,
+      rating: selectedReviewStar,
+      comment: comment,
+      approved: false
+    }]);
+
+    if (error) { errEl.textContent = 'Error submitting review. Please try again.'; errEl.style.display = 'block'; return; }
+    sucEl.style.display = 'block';
+    document.getElementById('review-author-input').value = '';
+    document.getElementById('review-text-input').value = '';
+    selectedReviewStar = 0;
+    document.getElementById('star-picker').querySelectorAll('span').forEach(s => s.classList.remove('lit'));
+  }
+
+  // ═══════════════════════════════════════════════════
+  // BROADCAST QUOTE REQUEST
+  // ═══════════════════════════════════════════════════
+  async function submitQuoteRequest(e) {
+    e.preventDefault();
+    const name = document.getElementById('qr-name').value.trim();
+    const phone = document.getElementById('qr-phone').value.trim();
+    const parish = document.getElementById('qr-parish').value;
+    const tradeNeeded = document.getElementById('qr-trade').value;
+    const message = document.getElementById('qr-message').value.trim();
+
+    if (!name || !phone || !tradeNeeded) {
+      alert('Please fill in your name, phone, and the trade you need.');
+      return;
+    }
+
+    // 1. Save to Supabase
+    const { error } = await supabase.from('quote_requests').insert([{
+      client_name: name,
+      client_phone: phone,
+      parish: parish,
+      trade_needed: tradeNeeded,
+      message: message
+    }]);
+
+    if (error) { alert('Error submitting request: ' + error.message); return; }
+
+    // 2. Find matching tradespeople
+    let query = supabase.from('tradesmen').select('full_name,phone,trade_title,location').eq('active', true);
+    if (tradeNeeded && tradeNeeded !== 'Other') {
+      query = query.ilike('trade_title', '%' + tradeNeeded.split(' ')[0] + '%');
+    }
+    if (parish) {
+      query = query.ilike('location', '%' + parish.split(' ')[0] + '%');
+    }
+    const { data: matched } = await query.limit(20);
+
+    const matchCount = matched ? matched.length : 0;
+
+    // 3. Build WhatsApp deep-links and open first few
+    if (matched && matched.length > 0) {
+      const jobMsg = encodeURIComponent(
+        `Hi ${matched[0]?.full_name?.split(' ')[0] || 'there'}! A client posted a job request on TradeLink Caribbean that matches your trade.\n\n` +
+        `📋 Job: ${tradeNeeded}\n` +
+        `📍 Location: ${parish || 'Island Wide'}\n` +
+        `👤 Client: ${name}\n` +
+        `📞 Contact: ${phone}\n` +
+        `${message ? '📝 Details: ' + message + '\n' : ''}\n` +
+        `Reply to this message to connect with the client directly.\n\n— TradeLink Caribbean`
+      );
+
+      // Open WhatsApp links for matched tradespeople (up to 3 auto-open, rest stored)
+      const autoOpen = matched.slice(0, 1); // Only auto-open 1 to avoid popup blocker
+      autoOpen.forEach(tp => {
+        const tp_phone = (tp.phone || '').replace(/\D/g, '');
+        if (tp_phone.length >= 7) {
+          window.open(`https://wa.me/1876${tp_phone}?text=${jobMsg}`, '_blank');
+        }
+      });
+    }
+
+    // 4. Show success
+    document.getElementById('qr-success').style.display = 'block';
+    const countEl = document.getElementById('qr-matched-count');
+    if (matchCount > 0) {
+      countEl.textContent = `Found ${matchCount} matching tradesperson${matchCount !== 1 ? 's' : ''} — WhatsApp notification sent. They can contact you directly at ${phone}.`;
+    } else {
+      countEl.textContent = `Your request is saved. We'll manually match you with a tradesperson and contact you via WhatsApp at ${phone}.`;
+    }
+    document.getElementById('quote-form').reset();
+  }
+
+
+
+  // ─── Save Site Content (live only — no DB persistence for content yet) ───
+  function saveContent() {
+    const headline = document.getElementById('edit-headline').value;
+    const sub = document.getElementById('edit-subheading').value;
+    const stat1 = document.getElementById('edit-stat1').value;
+    const stat1label = document.getElementById('edit-stat1-label').value;
+
+    const h1 = document.querySelector('h1');
+    if (h1) h1.innerHTML = headline.replace(/build/i, '<em>build</em>');
+    const subEl = document.querySelector('.hero-sub');
+    if (subEl) subEl.textContent = sub;
+    const statNums = document.querySelectorAll('.stat-num');
+    if (statNums[0]) statNums[0].textContent = stat1;
+    const statLabels = document.querySelectorAll('.stat-label');
+    if (statLabels[0]) statLabels[0].textContent = stat1label;
+
+    document.getElementById('site-success').style.display = 'block';
+    setTimeout(() => document.getElementById('site-success').style.display = 'none', 3000);
+  }
+
+  // ─── Admin Panel ───
+  function openAdmin() {
+    document.getElementById('admin-overlay').classList.add('active');
+    if (!isAuthenticated) {
+      document.getElementById('auth-gate').style.display = 'block';
+      document.getElementById('admin-main').style.display = 'none';
+    } else {
+      document.getElementById('auth-gate').style.display = 'none';
+      document.getElementById('admin-main').style.display = 'block';
+      loadAdminStats();
+      loadAdminTradeList();
+      loadAdminAdsList();
+      loadLeads();
+      loadSubscriptions();
+    }
+  }
+
+  function closeAdmin() {
+    document.getElementById('admin-overlay').classList.remove('active');
+  }
+
+  function checkAuth() {
+    const pw = document.getElementById('admin-password').value;
+    if (pw === ADMIN_PASSWORD) {
+      isAuthenticated = true;
+      document.getElementById('auth-gate').style.display = 'none';
+      document.getElementById('admin-main').style.display = 'block';
+      document.getElementById('admin-password').value = '';
+      document.getElementById('auth-error').style.display = 'none';
+      loadAdminStats();
+      loadAdminTradeList();
+      loadAdminAdsList();
+      loadLeads();
+      loadSubscriptions();
+    } else {
+      document.getElementById('auth-error').style.display = 'block';
+      document.getElementById('admin-password').value = '';
+    }
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.admin-content').forEach(c => c.classList.remove('active'));
+    if (event && event.target) event.target.classList.add('active');
+    else document.querySelector(`[onclick="switchTab('${tab}')"]`)?.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+
+  function changePassword() {
+    const np = document.getElementById('new-pass').value;
+    const cp = document.getElementById('confirm-pass').value;
+    if (!np) return alert('Enter a new password.');
+    if (np !== cp) return alert('Passwords do not match.');
+    ADMIN_PASSWORD = np;
+    document.getElementById('new-pass').value = '';
+    document.getElementById('confirm-pass').value = '';
+    document.getElementById('pass-success').style.display = 'block';
+    setTimeout(() => document.getElementById('pass-success').style.display = 'none', 3000);
+  }
+
+
+  // ─── Subscribe Modal ───
+  function openSubscribeModal(plan) {
+    const labels = { bronze: 'Bronze Plan — USD $6/month', standard: 'Standard Plan — USD $10.99/month', gold: 'Gold Plan — USD $20/month' };
+    document.getElementById('sub-plan').value = plan;
+    document.getElementById('sub-plan-label').textContent = labels[plan] || plan;
+    document.getElementById('sub-success').style.display = 'none';
+    document.getElementById('sub-error').style.display = 'none';
+    document.getElementById('subscribe-overlay').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSubscribeModal() {
+    document.getElementById('subscribe-overlay').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  async function submitSubscription() {
+    const name = document.getElementById('sub-name').value.trim();
+    const phone = document.getElementById('sub-phone').value.trim();
+    const trade = document.getElementById('sub-trade').value.trim();
+    const parish = document.getElementById('sub-parish').value.trim();
+    const plan = document.getElementById('sub-plan').value;
+
+    const errEl = document.getElementById('sub-error');
+    errEl.style.display = 'none';
+
+    if (!name || !phone || !trade) {
+      errEl.textContent = 'Please fill in your name, phone, and trade.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    const { error } = await supabase.from('subscription_registrations').insert([{
+      full_name: name,
+      phone: phone,
+      trade: trade,
+      parish: parish,
+      plan: plan,
+      payment_method: 'lynk'
+    }]);
+
+    if (error) {
+      errEl.textContent = 'Something went wrong. Please try again or WhatsApp us directly.';
+      errEl.style.display = 'block';
+      console.error(error);
+      return;
+    }
+
+    document.getElementById('sub-success').style.display = 'block';
+    ['sub-name','sub-phone'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    document.getElementById('sub-trade').value = '';
+    document.getElementById('sub-parish').value = '';
+  }
+
+  // ─── Advertiser Modal ───
+  function openAdvertiserModal(placement, tier) {
+    const tierLabels = { tier1: 'Premium Tier — J$10,000/month', tier2: 'Standard Tier — J$7,000/month' };
+    document.getElementById('adv-placement').value = placement;
+    document.getElementById('adv-tier').value = tier;
+    document.getElementById('adv-placement-label').textContent = placement + ' · ' + (tierLabels[tier] || '');
+    document.getElementById('adv-success').style.display = 'none';
+    document.getElementById('adv-error').style.display = 'none';
+    document.getElementById('advertiser-overlay').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAdvertiserModal() {
+    document.getElementById('advertiser-overlay').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  async function submitAdvertiserEnquiry() {
+    const business = document.getElementById('adv-business').value.trim();
+    const contact = document.getElementById('adv-contact').value.trim();
+    const phone = document.getElementById('adv-phone').value.trim();
+    const message = document.getElementById('adv-message').value.trim();
+    const placement = document.getElementById('adv-placement').value;
+    const tier = document.getElementById('adv-tier').value;
+
+    const errEl = document.getElementById('adv-error');
+    errEl.style.display = 'none';
+
+    if (!business || !phone) {
+      errEl.textContent = 'Business name and phone are required.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    const { error } = await supabase.from('advertiser_enquiries').insert([{
+      business_name: business,
+      contact_name: contact,
+      phone: phone,
+      placement_interest: placement,
+      tier: tier,
+      message: message
+    }]);
+
+    if (error) {
+      errEl.textContent = 'Something went wrong. Please try again.';
+      errEl.style.display = 'block';
+      console.error(error);
+      return;
+    }
+
+    document.getElementById('adv-success').style.display = 'block';
+    ['adv-business','adv-contact','adv-phone','adv-message'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.value = '';
+    });
+  }
+
+  // ─── Load Leads (admin) ───
+  async function loadLeads() {
+    const { data, error } = await supabase.from('quote_requests').select('*').order('created_at', { ascending: false }).limit(50);
+    const list = document.getElementById('leads-list');
+    if (!list) return;
+    if (error || !data || data.length === 0) {
+      list.innerHTML = '<div style="color:var(--silver-dim);font-size:0.9rem;">No leads yet. When property owners submit requests, they'll appear here.</div>';
+      return;
+    }
+    list.innerHTML = data.map(l => `
+      <div class="admin-list-item" style="flex-direction:column;align-items:flex-start;gap:0.4rem;">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <div class="admin-list-item-name">${l.client_name} — ${l.trade_needed}</div>
+          <div style="font-size:0.75rem;color:var(--silver-dim);">${new Date(l.created_at).toLocaleDateString('en-JM')}</div>
+        </div>
+        <div class="admin-list-item-sub">📍 ${l.parish || 'Parish not specified'} · 📞 ${l.client_phone}</div>
+        ${l.message ? `<div style="font-size:0.82rem;color:rgba(245,239,224,0.6);margin-top:0.2rem;">${l.message}</div>` : ''}
+        <a href="https://wa.me/1876${(l.client_phone||'').replace(/\D/g,'')}" target="_blank" style="font-size:0.78rem;background:var(--green-light);color:var(--cream);padding:0.3rem 0.8rem;border-radius:4px;text-decoration:none;margin-top:0.3rem;">WhatsApp Client</a>
+      </div>`).join('');
+  }
+
+  // ─── Load Subscriptions (admin) ───
+  async function loadSubscriptions() {
+    const { data, error } = await supabase.from('subscription_registrations').select('*').order('created_at', { ascending: false }).limit(50);
+    const list = document.getElementById('subscriptions-list');
+    if (!list) return;
+    if (error || !data || data.length === 0) {
+      list.innerHTML = '<div style="color:var(--silver-dim);font-size:0.9rem;">No subscription registrations yet.</div>';
+      return;
+    }
+    const planColors = { bronze: '#CD7F32', standard: 'var(--accent)', gold: '#FFD700' };
+    list.innerHTML = data.map(s => `
+      <div class="admin-list-item" style="flex-direction:column;align-items:flex-start;gap:0.4rem;">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <div class="admin-list-item-name">${s.full_name}</div>
+          <div style="font-size:0.75rem;font-weight:700;color:${planColors[s.plan]||'var(--accent)'};text-transform:uppercase;">${s.plan}</div>
+        </div>
+        <div class="admin-list-item-sub">🔨 ${s.trade} · 📍 ${s.parish||'—'} · 📞 ${s.phone}</div>
+        <div style="display:flex;gap:0.6rem;margin-top:0.3rem;align-items:center;">
+          <span style="font-size:0.75rem;padding:0.2rem 0.5rem;border-radius:3px;background:${s.payment_confirmed?'rgba(42,74,46,0.3)':'rgba(192,57,43,0.2)'};color:${s.payment_confirmed?'var(--green-light)':'var(--red)'};">${s.payment_confirmed ? '✓ Paid' : '⏳ Awaiting Payment'}</span>
+          <a href="https://wa.me/1876${(s.phone||'').replace(/\D/g,'')}" target="_blank" style="font-size:0.75rem;background:var(--green-light);color:var(--cream);padding:0.2rem 0.6rem;border-radius:4px;text-decoration:none;">WhatsApp</a>
+          ${!s.payment_confirmed ? `<button onclick="confirmPayment('${s.id}', this)" style="font-size:0.75rem;background:var(--accent);color:var(--navy);border:none;padding:0.2rem 0.6rem;border-radius:4px;cursor:pointer;">Confirm Payment</button>` : ''}
+        </div>
+      </div>`).join('');
+  }
+
+  // ─── Confirm Payment (admin) ───
+  async function confirmPayment(id, btn) {
+    const { error } = await supabase.from('subscription_registrations').update({ payment_confirmed: true }).eq('id', id);
+    if (error) { alert('Error: ' + error.message); return; }
+    btn.closest('.admin-list-item').querySelector('span').textContent = '✓ Paid';
+    btn.closest('.admin-list-item').querySelector('span').style.background = 'rgba(42,74,46,0.3)';
+    btn.closest('.admin-list-item').querySelector('span').style.color = 'var(--green-light)';
+    btn.remove();
+  }
+
+
+
+  // ── NAV DROPDOWN LOGIC ──
+  function toggleDrop(key) {
+    const all = ['browse','trades','adv'];
+    all.forEach(k => {
+      const el = document.getElementById('drop-' + k);
+      if (el) el.classList.toggle('open', k === key && !el.classList.contains('open'));
+    });
+  }
+  function toggleMobile() {
+    document.getElementById('nav-mobile').classList.toggle('open');
+  }
+  function closeMobile() {
+    document.getElementById('nav-mobile').classList.remove('open');
+  }
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.nav-dropdown')) {
+      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+    }
+  });
+
+  // ─── Init ───
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadTradesmen();
+    await loadFeaturedAd();
+
+    // Attach quote form if it exists
+    const qf = document.getElementById('quote-form');
+    if (qf) qf.addEventListener('submit', submitQuoteRequest);
+
+    // Search filters
+    const filterTrade = document.getElementById('filter-trade');
+    const filterParish = document.getElementById('filter-parish');
+    if (filterTrade) filterTrade.addEventListener('change', applySearch);
+    if (filterParish) filterParish.addEventListener('change', applySearch);
+
+    // Admin overlay close
+    document.getElementById('admin-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeAdmin();
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+  });
+</script>
+</body>
+</html>
